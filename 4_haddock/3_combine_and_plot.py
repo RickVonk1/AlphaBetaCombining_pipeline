@@ -296,29 +296,35 @@ def run_analytics(haddock_output, error_list, output_dir, name, normalised_data,
     return rates
 
 def zip_and_remove(haddock_output, zip_template, name):
+    haddock_output = os.path.abspath(haddock_output)
     base_dir = os.path.dirname(haddock_output)
+    folder_name = os.path.basename(haddock_output)
+    
     Result_dir = os.path.join(os.path.dirname(haddock_output), 'Result')
-    zip_loc = os.path.join(Result_dir,'zipping')
+    zip_loc = os.path.join(Result_dir, 'zipping')
     zipping_file = f'{zip_loc}/Zipping_file_{name}.sh'
-    os.makedirs(zip_loc,exist_ok=True)
-    with open (zip_template,'r') as f:
+    os.makedirs(zip_loc, exist_ok=True)
+    
+    with open(zip_template, 'r') as f:
         contents = f.read()
     
     contents = contents.replace('$Result_location', str(Result_dir))
     contents = contents.replace('$main_loc', str(base_dir))
-    if os.path.isfile(os.path.join(base_dir,'Haddock_output.tar.gz')) :
+    contents = contents.replace('$folder_to_zip', str(folder_name))
+    
+    if os.path.isfile(os.path.join(base_dir, 'Haddock_output.tar.gz')):
         contents = contents.replace('$name', 'Haddock_output_2')
     else:
         contents = contents.replace('$name', 'Haddock_output')
+        
     contents = contents.replace('$haddock_output_loc', str(haddock_output))
     
-    with open (zipping_file,'w', encoding = 'utf-8') as f:
+    with open(zipping_file, 'w', encoding='utf-8') as f:
         f.write(contents)
     
     subprocess.run(['sbatch', zipping_file])
 
-    print(f'Zipping and removing Haddock_output of {name}\nDo not touch the Haddock_output file untill job is done')
-
+    print(f'Zipping and removing Haddock_output of {name}\nDo not touch the Haddock_output file until job is done')
 
 #------------ Main Execution -------------#
 exp_dir = '/projects/0/prjs1135/report_Rick/3_Jolada_data/Experiments'

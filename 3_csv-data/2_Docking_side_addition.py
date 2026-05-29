@@ -167,18 +167,23 @@ def zipping_af3_files(template, Working_dir):
     """File to zip 2_AF files to reduce sproject space"""
     Working_dir = os.path.abspath(Working_dir)
     parent_dir = os.path.dirname(Working_dir)
+    folder_name = os.path.basename(Working_dir)
+    
     files_dir = os.path.join(parent_dir, 'Intermediate_files/zipping')
-    os.makedirs(files_dir,exist_ok=True)
+    os.makedirs(files_dir, exist_ok=True)
 
     with open(template, 'r') as f:
         contents = f.read()
     
     contents = contents.replace('$Result_location', files_dir)
     contents = contents.replace('$main_loc', parent_dir)
-    if os.path.isfile(os.path.join(Working_dir,'2_AF.tar.gz')) :
+    contents = contents.replace('$folder_to_zip', folder_name)
+    
+    if os.path.isfile(os.path.join(Working_dir, '2_AF.tar.gz')):
         contents = contents.replace('$name', '2_AF_2')
     else:
         contents = contents.replace('$name', '2_AF')
+        
     contents = contents.replace('$haddock_output_loc', Working_dir)
 
     script_path = os.path.join(files_dir, '2_AF_zipping')

@@ -9,4 +9,6 @@
 
 OUTPUT_FILE="$main_loc/$name.tar.gz"
 
-tar -c --use-compress-program=pigz -f "$OUTPUT_FILE" "$haddock_output_loc" && rm -rf "$haddock_output_loc" && echo "Job Successful: $name has been zipped and removed."
+cd "$main_loc" || exit 1
+
+tar -c --use-compress-program=pigz -f "$OUTPUT_FILE" "$folder_to_zip" && rm -rf "$folder_to_zip"
