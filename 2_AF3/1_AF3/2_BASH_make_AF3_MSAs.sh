@@ -2,7 +2,7 @@
 # source activate alphafold3
 
 # Submit MSA generation jobs
-python /home/rvonk1/AF3_TCRpMHC_snellius/src/1_AF3/preprocess_and_run.py --mode run_MSA \
+python /home/rvonk1/3_Jolanda_data_Pipeline/Script_pipeline/2_AF3/1_AF3/preprocess_and_run.py --mode run_MSA \
     --input-csv /projects/0/prjs1135/report_Rick/3_Jolada_data/Experiments/tcr_alpha_11/2_AF/AF3_chains.csv \
     --output-dir /projects/0/prjs1135/report_Rick/3_Jolada_data/Experiments/tcr_alpha_11/2_AF/Process_1 \
     --tcrpmhc-specific \

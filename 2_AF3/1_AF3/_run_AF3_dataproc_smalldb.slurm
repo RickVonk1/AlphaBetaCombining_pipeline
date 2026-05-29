@@ -18,7 +18,7 @@ unset LD_PRELOAD
 data_root=/home/rvonk1/AF/modified_database
 
 # path to modified script
-python_file=/home/rvonk1/AF3_TCRpMHC_snellius/src/1_AF3/run_alphafold.py
+python_file=/home/rvonk1/3_Jolanda_data_Pipeline/Script_pipeline/2_AF3/1_AF3/run_alphafold.py
 
 # path to AF3 containing (fixed path for snellius surf)
 container_root=/sw/arch/RHEL9/EB_production/2024/software/AlphaFold/3.0.0-foss-2024a-CUDA-12.6.0/bin/alphafold-3.0.0.sif

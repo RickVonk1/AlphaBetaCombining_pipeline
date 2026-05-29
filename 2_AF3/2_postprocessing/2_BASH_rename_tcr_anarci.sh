@@ -1,6 +1,6 @@
 # !/bin/bash
 
-python /home/rvonk1/AF3_TCRpMHC_snellius/src/2_postprocessing/tcr_af3_to_pdb_renumb.py \
+python /home/rvonk1/3_Jolanda_data_Pipeline/Script_pipeline/2_AF3/2_postprocessing/tcr_af3_to_pdb_renumb.py \
     --input-dir /projects/0/prjs1135/report_Rick/3_Jolada_data/Experiments/tcr_alpha_11/2_AF/Process_2/TCR_post \
     --output-dir /projects/0/prjs1135/report_Rick/3_Jolada_data/Experiments/tcr_alpha_11/2_AF/Process_2/Renumbered_TCR
 

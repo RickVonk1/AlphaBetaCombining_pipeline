@@ -19,13 +19,13 @@ do
     # Submit first job and capture job ID
     job1_id=$(sbatch \
         --job-name=AF3_${base_name} \
-        /home/rvonk1/AF3_TCRpMHC_snellius/src/1_AF3/_run_AF3_dataproc_smalldb.slurm "$JSON_PATH" \
+        /home/rvonk1/3_Jolanda_data_Pipeline/Script_pipeline/2_AF3/1_AF3/_run_AF3_dataproc_smalldb.slurm "$JSON_PATH" \
         | awk '{print $4}')
 
     # Submit second job dependent on first finishing successfully
     sbatch \
         --job-name=Inf_${base_name} \
         --dependency=afterok:$job1_id \
-        /home/rvonk1/AF3_TCRpMHC_snellius/src/1_AF3/_run_AF3_inf_smalldb.slurm "$base_name"
+        /home/rvonk1/3_Jolanda_data_Pipeline/Script_pipeline/2_AF3/1_AF3/_run_AF3_inf_smalldb.slurm "$base_name"
 
 done

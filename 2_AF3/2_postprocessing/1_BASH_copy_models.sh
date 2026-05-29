@@ -6,7 +6,7 @@ INPUT_PATH=/projects/0/prjs1135/report_Rick/3_Jolada_data/Experiments/tcr_alpha_
 OUTPUT_PATH=/projects/0/prjs1135/report_Rick/3_Jolada_data/Experiments/tcr_alpha_11/2_AF/Process_2/TCR_post
 
 for case_path in "$INPUT_PATH"/*; do
-    python /home/rvonk1/AF3_TCRpMHC_snellius/src/2_postprocessing/copy_and_name_models_af3.py --model-dir $case_path \
+    python /home/rvonk1/3_Jolanda_data_Pipeline/Script_pipeline/2_AF3/2_postprocessing/copy_and_name_models_af3.py --model-dir $case_path \
         --output-dir $OUTPUT_PATH \
 
     done
