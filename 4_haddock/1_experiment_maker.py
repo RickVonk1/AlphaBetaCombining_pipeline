@@ -55,12 +55,13 @@ def pdb_input_remapping(source_folder, orientation_csv):
 
                 for model in structure:
                     for old_id, new_id in mapping.items():
+                        
                         if old_id in model and new_id in model:
                             target_chain = model[new_id]
                             source_chain = model[old_id]
                             
                             res_nums = [res.id[1] for res in target_chain.get_residues()]
-                            offset = max(res_nums) if res_nums else 0
+                            offset = (max(res_nums) if res_nums else 0) + 1000
 
                             for residue in list(source_chain):
                                 source_chain.detach_child(residue.id)
@@ -72,7 +73,17 @@ def pdb_input_remapping(source_folder, orientation_csv):
                             model.detach_child(old_id)
                         
                         elif old_id in model:
-                            model[old_id].id = new_id
+                            source_chain = model[old_id]
+                            
+                            for residue in list(source_chain):
+                                source_chain.detach_child(residue.id)
+                                old_res_id = residue.id
+                                new_res_id = (old_res_id[0], old_res_id[1] + 1000, old_res_id[2])
+                                residue.id = new_res_id
+                                source_chain.add(residue)
+                                
+
+                            source_chain.id = new_id
 
                 io.set_structure(structure)
                 io.save(file_path)
