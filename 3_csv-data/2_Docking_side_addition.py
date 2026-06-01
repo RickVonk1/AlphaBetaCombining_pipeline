@@ -5,6 +5,7 @@ This script is intended for after AF complex generation to extract information r
 This script will make a csv file containing structural and sequence info
 
 Input :
+    - The Experiment directory
     - An experiment name
     - Zipping statement
 
@@ -27,6 +28,7 @@ from Bio import PDB
 from pathlib import Path
 
 #----------------- inputs ------------------#
+Exp_dir = '/projects/0/prjs1135/report_Rick/3_Jolada_data/Experiments'
 
 experiment= 'tcr_alpha_11'
 
@@ -193,7 +195,7 @@ def zipping_af3_files(template, Working_dir):
     subprocess.run(['sbatch', script_path])
 
 #----------------- Activation ------------------#
-project_dir = os.path.join('/projects/0/prjs1135/report_Rick/3_Jolada_data/Experiments', experiment, '2_AF')
+project_dir = os.path.join(Exp_dir, experiment, '2_AF')
 swiftTCR_utils = '/home/rvonk1/swifttcr/utils'
 
 script_location = Path(__file__).resolve()

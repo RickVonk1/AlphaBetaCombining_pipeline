@@ -5,6 +5,7 @@ Author : Rick Vonk
 This is the first script in the haddock3 pipeline, this script is able to make an experiment directory with required subdirectories and able to put relavant pdb entries in the input folder
 
 Input :
+    - The Experiment directory
     - An experiment name
 
 Output:
@@ -21,8 +22,9 @@ import glob
 from Bio import PDB
 
 #----------------- inputs ------------------#
+working_dir = '/projects/0/prjs1135/report_Rick/4_Haddock_config_experimentation/experiments'
 
-experiment = 'tcr_alpha_11'
+experiment = 'test_set_redo'
 
 # ----------------- code ------------------ #
 def Folder_maker(experiment_name, output_dir):   
@@ -91,7 +93,6 @@ def pdb_input_remapping(source_folder, orientation_csv):
     return
 
 #----------------- Activation ------------------#
-working_dir = '/projects/0/prjs1135/report_Rick/3_Jolada_data/Experiments'
 Orientation = os.path.join(working_dir,experiment,'Intermediate_files', 'Confidence_docking_csv.csv')
 
 if __name__ == "__main__":

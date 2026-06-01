@@ -5,6 +5,7 @@ This script is intended for after AF complex generation to extract information r
 This script will make a csv file containing structural and sequence info
 
 Input :
+    - The Experiment directory
     - Experiment name
 
 Output :
@@ -24,6 +25,7 @@ from collections import defaultdict
 from filter_docking_side import postfilter
 
 #----------------- inputs ------------------#
+Exp_dir = '/projects/0/prjs1135/report_Rick/3_Jolada_data/Experiments'
 
 experiment= 'tcr_alpha_11'
 
@@ -224,7 +226,7 @@ def docking_side_checker(csv_file, Working_dir):
 
 #----------------- Activation ------------------#
 
-project_dir = os.path.join('/projects/0/prjs1135/report_Rick/3_Jolada_data/Experiments', experiment, '2_AF')
+project_dir = os.path.join(Exp_dir, experiment, '2_AF')
 
 if __name__ == "__main__":
     confidence_data = confidence_extraction(project_dir)

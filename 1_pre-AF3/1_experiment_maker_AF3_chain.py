@@ -6,6 +6,7 @@ This script makes a new experiment in the experiment folder and prepares require
 A target chain is chosen and combined with all beta chains
 
 Input:
+    - The Experiment directory
     - An experiment name
     - a alpha target chain from the csv file
 
@@ -23,6 +24,7 @@ import sys
 from pathlib import Path
 
 #----------------- inputs ------------------#
+Exp_dir = '/projects/0/prjs1135/report_Rick/3_Jolada_data/Experiments'
 
 experiment = 'tcr_alpha_11'
 
@@ -68,7 +70,7 @@ def AF3_chains_maker(output_dir, chains_file, target):
     return
 
 #----------------- Activation ------------------#
-working_dir = os.path.join('/projects/0/prjs1135/report_Rick/3_Jolada_data/Experiments', experiment)
+working_dir = os.path.join(Exp_dir, experiment)
 
 script_location = Path(__file__).resolve()
 single_chains = os.path.join(script_location.parent, 'required_files', 'Alpha_Beta_single_chains.csv')

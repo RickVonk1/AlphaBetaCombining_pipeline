@@ -5,6 +5,7 @@ Author : Rick Vonk
 This is the second script in the haddock3 pipeline and is able to make cfg files for each pdb entry and activate them in batches of 50.
 
 Input:
+    - The Experiment directory
     - An experiment name
 
 Output:
@@ -19,8 +20,9 @@ import subprocess
 import sys
 
 #--------- input -----------#
+working_dir = '/projects/0/prjs1135/report_Rick/4_Haddock_config_experimentation/experiments'
 
-experiment = 'tcr_alpha_11'
+experiment = 'test_set_redo'
 
 #--------- Code -----------#
 
@@ -88,7 +90,6 @@ def Activation(runs_dir):
 
 
 #--------- Activation -----------#
-working_dir = '/projects/0/prjs1135/report_Rick/3_Jolada_data/Experiments'
 
 script_location = Path(__file__).resolve()
 script_dir = script_location.parent
@@ -102,7 +103,7 @@ if __name__ == "__main__":
 
     config, runs, experiment_name = dir_maker(pdb_loc)
     config_maker(cfg_template_loc, pdb_loc, config)
-    runs_maker(experiment_name, runs_template_loc, runs, config), working_dir
+    runs_maker(experiment_name, runs_template_loc, runs, config, working_dir)
     Activation(runs)
 
 

@@ -5,6 +5,7 @@ Author : Rick Vonk
 This script is the last step in the haddock3 pipeline, it extracts relavant information, centralises it for the whole experiment, makes a plot and then then tars the Haddock_ouput file to reduce inode usage
 
 Input:
+    - The Experiment directory
     - An experiment name
     - the metrics you wan to use
     - if you want the files ot be zipped
@@ -28,8 +29,9 @@ import subprocess
 import tarfile
 from pathlib import Path
 #------------ locations / Inputs-------------#
+exp_dir = '/projects/0/prjs1135/report_Rick/4_Haddock_config_experimentation/experiments'
 
-Experiment_name = 'tcr_alpha_11'
+Experiment_name = 'test_set_redo'
 
 # total possibilities : ['AF3_confidence', 'total_energy', 'elec_energy','deltaG', 'haddock_score']
 metrics = ['AF3_confidence', 'haddock_score', 'deltaG']
@@ -183,6 +185,7 @@ def generate_rank_plot(processed_data, output_dir, name, selection):
 
     x = np.arange(len(ids))
     bottom = np.zeros(len(ids))
+    # True combination from test set
     highlight = {'tcra2b3', 'tcra5b2', 'tcra1b1'}
     
     edge_colors = ['black' if any(h in i for h in highlight) else 'none' for i in ids]
@@ -327,7 +330,6 @@ def zip_and_remove(haddock_output, zip_template, name):
     print(f'Zipping and removing Haddock_output of {name}\nDo not touch the Haddock_output file until job is done')
 
 #------------ Main Execution -------------#
-exp_dir = '/projects/0/prjs1135/report_Rick/3_Jolada_data/Experiments'
 confidence_csv = os.path.join(exp_dir,Experiment_name,'Intermediate_files', 'Confidence_docking_csv.csv')
 
 script_location = Path(__file__).resolve()
