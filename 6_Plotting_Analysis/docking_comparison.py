@@ -31,8 +31,6 @@ def Data_extraction(Exp_dir):
     for case in glob.glob(os.path.join(Exp_dir,'*')):
         if 'tcr_alpha' not in case:
             continue
-        if 'tcr_alpha_3' in case:
-            continue
         data_file = os.path.join(case,'Intermediate_files','Confidence_docking_csv.csv')
         df_csv = pd.read_csv(glob.glob(data_file)[0])
         df_csv = df_csv.drop(columns=['cdr3_a','cdr3_b','tcr_a_seq','tcr_b_seq','Peptide'])

@@ -57,8 +57,8 @@ def confidence_extraction(experiment_dir):
     df_filtered = df_useful[proper_docked]
     
     proper_base_ID = df_filtered.groupby('base_ID').agg(
-        true_cases_count=('experiment_id', 'size'),
-        avg_af3_confidence=('AF3_confidence_score', 'mean')
+        properly_docked_model_count=('experiment_id', 'size'),
+        avg_AF3_confidence=('AF3_confidence_score', 'mean')
     ).reset_index()
 
     return proper_base_ID

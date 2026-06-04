@@ -24,7 +24,7 @@ def data_extraction(experiment_dir):
     return df_combined
 
 def csv_maker(experiment_dir, df)
-    csv_loc = os.path.join(experiment_dir, 'Combined_results', 'Swift_data.csv')
+    csv_loc = os.path.join(experiment_dir, 'Combined_results', 'Swift_Combined_data.csv')
     csv_file = pd.to_csv(csv_loc, ignore_index=True)
 
     return

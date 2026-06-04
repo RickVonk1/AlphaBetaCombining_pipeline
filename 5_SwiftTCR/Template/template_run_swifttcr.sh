@@ -8,6 +8,8 @@
 #SBATCH --error=[output_dir]_log/run_%j.err
 #SBATCH --output=[output_dir]_log/run_%j.out
 
+START_TIME=$(date +%s)
+
 # Activates conda enviroment
 source activate swifttcr
 
@@ -72,4 +74,14 @@ for mhc_file in "$INPUT_MHC_DIR"/*; do
     done
 done
 
-        
+
+END_TIME=$(date +%s)
+ELAPSED_SEC=$((END_TIME - START_TIME))
+
+# Format seconds into HH:MM:SS
+REMAINING_SEC=$((ELAPSED_SEC % 60))
+TOTAL_MIN=$((ELAPSED_SEC / 60))
+REMAINING_MIN=$((TOTAL_MIN % 60))
+TOTAL_HOURS=$((TOTAL_MIN / 60))
+
+printf "Total Execution Time: %02d:%02d:%02d\n" $TOTAL_HOURS $REMAINING_MIN $REMAINING_SEC
