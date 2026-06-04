@@ -6,8 +6,8 @@
 #SBATCH --gpus-per-task=1
 #SBATCH --cpus-per-task=18
 #SBATCH --time=01:00:00
-#SBATCH --error=/projects/0/prjs1135/report_Rick/3_Jolada_data/Experiments/tcr_alpha_11/2_AF/Process_2/log/inf/%j.err
-#SBATCH --output=/projects/0/prjs1135/report_Rick/3_Jolada_data/Experiments/tcr_alpha_11/2_AF/Process_2/log/inf/%j.out
+#SBATCH --error=/projects/0/prjs1135/report_Rick/3_Jolada_data/Experiments/tcr_alpha_3/2_AF/Process_2/log/inf/%j.err
+#SBATCH --output=/projects/0/prjs1135/report_Rick/3_Jolada_data/Experiments/tcr_alpha_3/2_AF/Process_2/log/inf/%j.out
 
 
 module load 2024
@@ -28,7 +28,7 @@ container_root=/sw/arch/RHEL9/EB_production/2024/software/AlphaFold/3.0.0-foss-2
 model_root=/home/rvonk1/AF/Weights
 
 # Set the proper project root
-project_root=/projects/0/prjs1135/report_Rick/3_Jolada_data/Experiments/tcr_alpha_11/2_AF/Process_2/Raw_TCRs
+project_root=/projects/0/prjs1135/report_Rick/3_Jolada_data/Experiments/tcr_alpha_3/2_AF/Process_2/Raw_TCRs
 bind_root=/projects
 
 # path to submission script AF3

@@ -3,7 +3,7 @@
 # This will given a list of json files loop over said json files and run the two AF3 scripts
 
 
-JSON_DIR=/projects/0/prjs1135/report_Rick/3_Jolada_data/Experiments/tcr_alpha_11/2_AF/Process_1
+JSON_DIR=/projects/0/prjs1135/report_Rick/3_Jolada_data/Experiments/tcr_alpha_3/2_AF/Process_1
 
 for JSON_PATH in "$JSON_DIR"/*/*.json
 do

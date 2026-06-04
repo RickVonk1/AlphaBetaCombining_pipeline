@@ -27,7 +27,7 @@ from filter_docking_side import postfilter
 #----------------- inputs ------------------#
 Exp_dir = '/projects/0/prjs1135/report_Rick/3_Jolada_data/Experiments'
 
-experiment= 'tcr_alpha_11'
+experiment= 'tcr_alpha_3'
 
 # ----------------- code ------------------ #
 def confidence_extraction(Working_dir):

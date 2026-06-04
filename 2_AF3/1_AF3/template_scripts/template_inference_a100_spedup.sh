@@ -16,10 +16,10 @@ module load AlphaFold/3.0.0-foss-2024a-CUDA-12.6.0
 unset LD_PRELOAD
 
 #path to reduced database
-DATA_PATH=/projects/0/prjs1135/report_danielle/AF3_modified_database/modified_database
+DATA_PATH=/home/rvonk1/AF/modified_database
 
 # path to modified script
-python_file=/projects/0/prjs1135/report_danielle/AF3_modified_database/run_alphafold.py
+python_file=/home/rvonk1/AF3_TCRpMHC_snellius/src/1_AF3/run_alphafold.py
 
 # path to AF3 containing (fixed path for snellius surf)
 AF3_CONTAINER_PATH=/sw/arch/RHEL9/EB_production/2024/software/AlphaFold/3.0.0-foss-2024a-CUDA-12.6.0/bin/alphafold-3.0.0.sif

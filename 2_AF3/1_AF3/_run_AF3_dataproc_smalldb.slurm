@@ -5,8 +5,8 @@
 #SBATCH --partition=genoa
 #SBATCH --cpus-per-task=24
 #SBATCH --time=01:00:00
-#SBATCH --error=/projects/0/prjs1135/report_Rick/3_Jolada_data/Experiments/tcr_alpha_11/2_AF/Process_2/log/data/%j.err
-#SBATCH --output=/projects/0/prjs1135/report_Rick/3_Jolada_data/Experiments/tcr_alpha_11/2_AF/Process_2/log/data/%j.out
+#SBATCH --error=/projects/0/prjs1135/report_Rick/3_Jolada_data/Experiments/tcr_alpha_3/2_AF/Process_2/log/data/%j.err
+#SBATCH --output=/projects/0/prjs1135/report_Rick/3_Jolada_data/Experiments/tcr_alpha_3/2_AF/Process_2/log/data/%j.out
 
 #load Alphafold
 module load 2024
@@ -30,7 +30,7 @@ model_root=/home/rvonk1/AF/Weights
 JSON_PATH="$1"
 
 # Set the proper project root
-project_root=/projects/0/prjs1135/report_Rick/3_Jolada_data/Experiments/tcr_alpha_11/2_AF/Process_2/Raw_TCRs
+project_root=/projects/0/prjs1135/report_Rick/3_Jolada_data/Experiments/tcr_alpha_3/2_AF/Process_2/Raw_TCRs
 bind_root=/projects
 
 #clock the time 

@@ -26,9 +26,9 @@ from pathlib import Path
 #----------------- inputs ------------------#
 Exp_dir = '/projects/0/prjs1135/report_Rick/3_Jolada_data/Experiments'
 
-experiment = 'tcr_alpha_11'
+experiment = 'tcr_alpha_3'
 
-target_a_chain = 'a11'
+target_a_chain = 'a3'
 
 # ----------------- code ------------------ #
 def Experiment_maker(output_dir, name):

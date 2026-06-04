@@ -29,9 +29,9 @@ import subprocess
 import tarfile
 from pathlib import Path
 #------------ locations / Inputs-------------#
-exp_dir = '/projects/0/prjs1135/report_Rick/4_Haddock_config_experimentation/experiments'
+exp_dir = '/projects/0/prjs1135/report_Rick/3_Jolada_data/Experiments'
 
-Experiment_name = 'test_set_redo'
+Experiment_name = 'tcr_alpha_3'
 
 # total possibilities : ['AF3_confidence', 'total_energy', 'elec_energy','deltaG', 'haddock_score']
 metrics = ['AF3_confidence', 'haddock_score', 'deltaG']

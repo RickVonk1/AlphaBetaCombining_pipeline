@@ -20,9 +20,9 @@ import subprocess
 import sys
 
 #--------- input -----------#
-working_dir = '/projects/0/prjs1135/report_Rick/4_Haddock_config_experimentation/experiments'
+working_dir = '/projects/0/prjs1135/report_Rick/3_Jolada_data/Experiments'
 
-experiment = 'test_set_redo'
+experiment = 'tcr_alpha_3'
 
 #--------- Code -----------#
 
