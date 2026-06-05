@@ -26,7 +26,7 @@ from pathlib import Path
 exp_dir = '/projects/0/prjs1135/report_Rick/3_Jolada_data/Experiments'
 SwiftTC_python_loc = '/home/rvonk1/swifttcr/scripts/swift_tcr.py'
 
-Experiment_name = 'tcr_alpha_5'
+Experiment_name = 'tcr_alpha_11'
 
 zipping = False
 # ----------------- code ------------------ #

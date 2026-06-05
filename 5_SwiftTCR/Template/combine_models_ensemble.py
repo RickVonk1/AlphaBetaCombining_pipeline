@@ -90,7 +90,7 @@ def combine_ft_runs(input_dir, pdb_filter=None, run_filter=None):
         if not os.path.isdir(dir1): continue
         
         run_name = os.path.basename(dir1).lower()
-        pdb_id = run_name 
+        pdb_id = run_name[:4]
         
         if run_filter and run_name not in run_filter: continue
         if pdb_filter and pdb_id not in [p.lower() for p in pdb_filter]: continue

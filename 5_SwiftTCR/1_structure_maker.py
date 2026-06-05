@@ -21,7 +21,7 @@ from Bio.PDB import PDBParser, PDBIO, Select
 #----------------- inputs ------------------#
 exp_dir = '/projects/0/prjs1135/report_Rick/3_Jolada_data/Experiments'
 
-Experiment_name = 'tcr_alpha_5'
+Experiment_name = 'tcr_alpha_11'
 
 # ----------------- code ------------------ #
 class ChainSelect(Select):

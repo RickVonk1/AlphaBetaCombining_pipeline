@@ -10,7 +10,7 @@ import numpy as np
 import pandas as pd
 
 #----------------- inputs ------------------#
-csv_file = '/projects/0/prjs1135/report_Rick/3_Jolada_data/Experiments/tcr_alpha_1/Intermediate_files/Swift_Result.csv'
+csv_file = '/projects/0/prjs1135/report_Rick/3_Jolada_data/Experiments/Combined_results/Swift_Combined_data.csv'
 
 # ----------------- code ------------------ #
 
@@ -56,10 +56,10 @@ def correlation(df1, df2, sort_by):
 
 #----------------- Activation ------------------#
 
-df1_base = df_maker(csv_file, 'avg_af3_confidence', 'base_ID')
+df1_base = df_maker(csv_file, 'properly_docked_model_count', 'base_ID')
 #df1_avg = df_averaging(df_af_unf,'base_ID','AF3_confidence_score', 'AF3_score')
 
-df2_base = df_maker(csv_file,'Top_Cluster_size','base_ID')
+df2_base = df_maker(csv_file,'avg_AF3_confidence','base_ID')
 #df2_avg = df_averaging(df_docking_unf,'base_ID','proper_docking','docking_factor')
 
 correlation(df1_base, df2_base, 'base_ID')

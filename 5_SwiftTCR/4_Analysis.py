@@ -16,6 +16,8 @@ import os
 import glob
 import re
 import pandas as pd
+import math
+import subprocess
 from pathlib import Path
 
 
@@ -27,6 +29,45 @@ Experiment_name = 'tcr_alpha_1'
 zipping = False
 
 # ----------------- code ------------------ #
+def compute_entropy(sizes):
+    total_elements = sum(sizes)
+    if total_elements == 0:
+        return 0.0, 0
+    
+    entropy = 0.0
+    for size in sizes:
+        if size > 0:
+            p = size / total_elements
+            entropy -= p * math.log2(p)
+            
+    return entropy, total_elements
+
+def calculate_shannon_entropy(experiment_dir):
+    Swift_output = os.path.join(experiment_dir, 'SwiftTCR')
+    Cluster_result = []
+    for case in glob.glob(os.path.join(Swift_output,'*')):
+        if 'runs_dir' in case:
+            continue
+
+        base_ID = os.path.basename(case)
+        combined_file = os.path.join(case, 'Swift_combined', base_ID[:4], 'clustering.txt')
+        sizes_just_neighbors = []
+        pattern = re.compile(r'with (\d+) neighbors')
+    
+        with open(combined_file, 'r') as f:
+            for line in f:
+                match = pattern.search(line)
+                if match:
+                    neighbors = int(match.group(1))
+                    sizes_just_neighbors.append(neighbors + 1)
+
+        entropy_neighbors, total_n = compute_entropy(sizes_just_neighbors)
+        Cluster_result.append({'base_ID': base_ID, 'Shannon_entropy_score': entropy_neighbors})
+
+    df = pd.DataFrame(Cluster_result)
+    
+    return df
+
 def Swift_extraction(experiment_dir):
     Swift_output = os.path.join(experiment_dir, 'SwiftTCR')
     Cluster_result = []
@@ -35,7 +76,7 @@ def Swift_extraction(experiment_dir):
             continue
 
         base_ID = os.path.basename(case)
-        combined_file = os.path.join(case, 'Swift_combined', base_ID, 'clustering.txt')
+        combined_file = os.path.join(case, 'Swift_combined', base_ID[:4], 'clustering.txt')
         with open (combined_file, 'r') as f:
             content = f.readline()
             match = re.search(r'with\s+(\d+)\s+neighbors', content)
@@ -64,7 +105,8 @@ def confidence_extraction(experiment_dir):
     return proper_base_ID
 
 def csv_maker(experiment_dir):
-    df_combined = pd.merge(Swift_extraction(experiment_dir), confidence_extraction(experiment_dir), on='base_ID')
+    df_combined_unf = pd.merge(Swift_extraction(experiment_dir), confidence_extraction(experiment_dir), on='base_ID')
+    df_combined = pd.merge(df_combined_unf, calculate_shannon_entropy(experiment_dir), on='base_ID').round(3)
     csv_loc = os.path.join(experiment_dir,'Intermediate_files','Swift_Result.csv')
 
     Swift_csv = df_combined.to_csv(csv_loc,index=False)
