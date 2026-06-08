@@ -43,5 +43,5 @@ def df_maker(csv_file, complex_list):
     return new_csv
 
 #----------------- Activation ------------------#
-
-df_maker(ab_csv, complex_list)
+if __name__ == '__main__':
+    df_maker(ab_csv, complex_list)

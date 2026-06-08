@@ -35,6 +35,6 @@ def csv_maker(experiment_dir, df):
     return
 
 #----------------- Activation ------------------#
-
-df = data_extraction(experiment_dir)
-csv_maker(experiment_dir, df)
+if __name__ == '__main__':
+    df = data_extraction(experiment_dir)
+    csv_maker(experiment_dir, df)

@@ -55,13 +55,14 @@ def correlation(df1, df2, sort_by):
 
 
 #----------------- Activation ------------------#
+if __name__ == '__main__':
 
-df1_base = df_maker(csv_file, 'properly_docked_model_count', 'base_ID')
-#df1_avg = df_averaging(df_af_unf,'base_ID','AF3_confidence_score', 'AF3_score')
+    df1_base = df_maker(csv_file, 'properly_docked_model_count', 'base_ID')
+    #df1_avg = df_averaging(df_af_unf,'base_ID','AF3_confidence_score', 'AF3_score')
 
-df2_base = df_maker(csv_file,'avg_AF3_confidence','base_ID')
-#df2_avg = df_averaging(df_docking_unf,'base_ID','proper_docking','docking_factor')
+    df2_base = df_maker(csv_file,'avg_AF3_confidence','base_ID')
+    #df2_avg = df_averaging(df_docking_unf,'base_ID','proper_docking','docking_factor')
 
-correlation(df1_base, df2_base, 'base_ID')
+    correlation(df1_base, df2_base, 'base_ID')
 
 

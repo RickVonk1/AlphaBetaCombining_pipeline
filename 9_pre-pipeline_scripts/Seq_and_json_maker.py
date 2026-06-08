@@ -156,9 +156,9 @@ script_location = Path(__file__).resolve()
 json_dir = os.path.join(script_location.parent, 'json/')
 ab_csv = os.path.join(script_location.parent.parent, '1_pre-AF3','required_files', 'Alpha_Beta_single_chains.csv')
 
-
-errors = stitchr_json(json_dir, ab_csv)
-data = json_extraction(json_dir)
-data = Manual_addition(data)
-csv_loc = csv_maker(json_dir, data)
-csv_updater(ab_csv, csv_loc)
+if __name__ == '__main__':
+    errors = stitchr_json(json_dir, ab_csv)
+    data = json_extraction(json_dir)
+    data = Manual_addition(data)
+    csv_loc = csv_maker(json_dir, data)
+    csv_updater(ab_csv, csv_loc)

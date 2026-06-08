@@ -2,22 +2,32 @@
 ''''
 Author : Rick Vonk
 
-
-This code is made for the Alpha/beta combining pipeline. The intent of this code s to standardize the method of tarring large data file locaitons created within the pipeline. The code required only 2 inputs: a template and the directory wanting to tar.
+This code is made for the Alpha/beta combining pipeline. 
+The intent of this code is to standardize the method of tarring large data file locaitons created within the pipeline. 
+The code required only 2 inputs: a template and the directory wanting to tar.
 
 Input:
     - Template, standardized
     - The direcotry wanting to tar
 
 Output:
-    - A .tar.gz file with the anme fo the direcotry wantign to tar
+    - A .tar.gz file with the name of the direcotry wanting to tar, in the directory above it.
     - The direcotry tarred, removed.
 
+- Usage:
+    - tar_and_remove.py /path/to/dir
+
 '''
+# ----------------- Imports ------------------ #
+import os
+import subprocess
+import sys
 # ----------------- code ------------------ #
 
-def tar_remove(template, dir_to_tar):
-    """File to zip SwiftTCR files to reduce sproject space"""
+def tar_remove(dir_to_tar):
+    script_location = Path(__file__).resolve()
+    template = os.path.join(script_location.parent.parent, '4_haddock', 'required_for_scripts', 'zipping_template.sh')
+
     dir_to_tar = os.path.abspath(dir_to_tar)
     parent_dir = os.path.dirname(dir_to_tar)
     folder_name = os.path.basename(dir_to_tar)
@@ -43,5 +53,13 @@ def tar_remove(template, dir_to_tar):
     with open(script_path, 'w', encoding='utf-8') as f:
         f.write(contents)
 
-    subprocess.run(['sbatch', script_path])
-    return
+    result = subprocess.run(['sbatch', script_path], capture_output=True, text=True)
+    return result
+
+if __name__ == '__main__':
+
+    if len(sys.argv) != 2:
+        print('Only 1 input is required')
+        sys.exit()
+
+    tar_remove(sys.argv[1])
