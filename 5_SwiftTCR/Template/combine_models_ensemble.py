@@ -43,10 +43,10 @@ def main(input_dir, output_dir, cores, cluster=True, pdb_filter=None, run_filter
     for pdb_id, merged_df in merged_dfs.items():
         final_dest = os.path.join(output_dir, pdb_id)
         if os.path.exists(final_dest):
-            print(f"\nSkipping {pdb_id}: Output map bestaat al in {output_dir}")
+            print(f"\nSkipping {pdb_id}: Output already exists in {output_dir}")
             continue
 
-        print(f"\n--- Verwerken van PDB: {pdb_id} ---")
+        print(f"\n--- Working on PDB: {pdb_id} ---")
 
         # Work map TMPDIR
         tmp_pdb_work = os.path.join(os.environ.get("TMPDIR", "/tmp"), f"work_{pdb_id}")
@@ -54,24 +54,24 @@ def main(input_dir, output_dir, cores, cluster=True, pdb_filter=None, run_filter
             shutil.rmtree(tmp_pdb_work)
         os.makedirs(tmp_pdb_work, exist_ok=True)
 
-        # 1. PDB's extraheren
+        # 1. PDB extraction
         copy_merged_to_temp(merged_df, input_dir, tmp_pdb_work)
         print(f"PDB's extracted")
         
-        # NIEUW: Schrijf de ft.000.00 alvast in de tmp_dir zodat de clustering hem kan lezen
+        # NEW: Write the ft.000.00 already in the tmp_dir so clustering can read it
         temp_ft = os.path.join(tmp_pdb_work, "ft.000.00")
         merged_df.to_csv(temp_ft, sep="\t", header=False, index=False)
         
-        # 2. Clustering (kan nu de ft.000.00 file vinden)
+        # 2. Clustering
         if cluster:
             swifttcr_clustering_combined(pdb_id, tmp_pdb_work, 3, cores)
             
-        # 3. Verplaats alles naar de definitieve output map
+        # 3. Relocate everything to the definitive output folder
         finalize_output(pdb_id, tmp_pdb_work, output_dir, merged_df)
         
         # 4. Tidying up
         shutil.rmtree(tmp_pdb_work)
-        print(f"--- Klaar met {pdb_id} ---")
+        print(f"--- Doen with {pdb_id} ---")
 
 def combine_ft_runs(input_dir, pdb_filter=None, run_filter=None):
     headers = ["Rotation Index", "Translation (x)", "Translation (y)", "Translation (z)",
@@ -151,7 +151,7 @@ def get_models(merged_df, inDIR):
         source_run_dir = os.path.join(input_dir, case.source_dir)
         tarFl = os.path.join(source_run_dir, "merged.tar")
         
-        # De structuur binnen de tar is 'merged/merged_X.pdb'
+        # The sctructure within tar is 'merged/merged_X.pdb'
         in_file_name = f"merged_{case.original_index}.pdb"
         out_file = os.path.join(out_merg, f"merged_{case.new_id}.pdb")
 
@@ -182,7 +182,7 @@ def copy_merged_to_temp(merged_df, input_dir, tmp_pdb_work):
         source_run_dir = os.path.join(input_dir, case.source_dir)
         tar_path = os.path.join(source_run_dir, "merged.tar")
         
-        # De structuur binnen de tar is 'merged/merged_X.pdb'
+        # The sctructure within tar is 'merged/merged_X.pdb'
         in_file_name = f"merged/merged_{case.original_index}.pdb"
         out_file = os.path.join(out_merg, f"merged_{case.new_id}.pdb")
         print(f"inputfile: {in_file_name}\nOutputfile: {out_file}")
@@ -199,7 +199,6 @@ def copy_merged_to_temp(merged_df, input_dir, tmp_pdb_work):
                     target.write(f.read())
 
             except KeyError:
-                # Soms zit het bestand zonder 'merged/' prefix in de tar
                 try:
                     alt_name = f"merged_{case.original_index}.pdb"
                     member = opened_tars[tar_path].getmember(alt_name)
@@ -236,41 +235,12 @@ def swifttcr_clustering_combined(pdb_id, work_dir, threshold, cores):
     print("Clustering started")
     os.chdir(work_dir)
     if not os.path.exists("merged") or len(os.listdir("merged")) == 0:
-        print("Geen PDBs gevonden om te clusteren.")
+        print("No PDB's foudn to cluster.")
         return
 
-    print(f"Start pairwise rmsd met {cores} cores")
+    print(f"Start pairwise rmsd with {cores} cores")
     pairwise_rmsd.calc_rmsd("merged", "irmsd.csv", "A", "D", 10, n_cores=cores)
     clustering.clustering_main("irmsd.csv", threshold, "clustering.txt")
-
-# def swifttcr_clustering_combined(pdb_id, work_dir, threshold, cores):
-#     os.chdir(work_dir)
-#     if not os.path.exists("merged") or len(os.listdir("merged")) == 0:
-#         print("Geen PDBs gevonden om te clusteren.")
-#         return
-        
-#     print(f"Start pairwise rmsd met {cores} cores")
-
-#     # 1. Bereken de afstanden (iRMSD) tussen alle gecombineerde modellen
-#     pairwise_rmsd.calc_rmsd("merged", "irmsd.csv", "A", "D", 10, n_cores=cores)
-    
-#     # 2. De gecombineerde energie-data staat al klaar (door de main functie gemaakt)
-#     # In finalize_output wordt merged_df opgeslagen als ft.000.00, 
-#     # maar we hebben het hier al nodig voor de ranking.
-#     energy_file = "ft.000.00" 
-    
-#     # Check of de energie-file al is aangemaakt, anders even tijdelijk aanmaken
-#     # (Dit is nodig omdat in je huidige main 'finalize_output' pas NA clustering komt)
-    
-#     print(f"Start Ranked Clustering (Density Scoring) voor {pdb_id}...")
-    
-#     # Belangrijk: Gebruik de nieuwe functie naam en geef de energy_file mee
-#     clustering.clustering_main_ranked(
-#         input_file="irmsd.csv", 
-#         energy_file=energy_file, 
-#         threshold=threshold, 
-#         output_file="clustering.txt"
-#     )
     
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
