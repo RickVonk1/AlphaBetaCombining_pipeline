@@ -36,7 +36,7 @@ working_dir = '/projects/0/prjs1135/report_Rick/3_Jolada_data/Experiments'
 plot_view_angle= [60,-30] # standard is [30,-60]
 
 # total possibilities : ['AF3_confidence', 'total_energy', 'elec_energy','deltaG', 'haddock_score']
-metrics = ['AF3_confidence', 'haddock_score', 'deltaG']
+metrics = ['AF3_confidence', 'haddock_score', 'deltaG', 'elec_energy']
 
 highlight = ['a1_b12', 'a1_b8', 'a10_b8', 'a10_b11', 'a11_b12', 'a11_b4', 'a11_b6', 'a11_b10', 'a2_b7', 'a2_b12', 'a2_b11', 'a2_b1', 'a2_b2', 'a3_b11', 'a3_b8', 'a3_b7', 'a3_b1', 'a3_b12', 'a4_b8', 'a4_b7', 'a4_b12', 'a5_b10', 'a5_b4', 'a6_b8', 'a7_b12', 'a7_b8', 'a7_b10', 'a8_b11', 'a9_b11', 'a9_b8'] 
 

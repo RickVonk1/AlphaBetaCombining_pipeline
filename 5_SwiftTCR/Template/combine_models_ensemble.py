@@ -7,6 +7,10 @@ import sys
 import argparse
 import tarfile
 from tqdm import tqdm
+
+# Local pipeline scripts in the same folder
+import clustering
+import pairwise_rmsd
 # From lthijs
 
 """
@@ -32,13 +36,6 @@ Finally, it writes a new output folder per PDB containing:
   - optional analysis outputs (irmsd.csv and clustering.txt)
 
 """
-
-
-# Import directory SwiftTCR folder
-input_swifttcr = "/home/rvonk1/swifttcr"
-sys.path.append(os.path.join(input_swifttcr, "scripts"))
-import clustering
-import pairwise_rmsd
 
 def main(input_dir, output_dir, cores, cluster=True, pdb_filter=None, run_filter=None):
     merged_dfs = combine_ft_runs(input_dir, pdb_filter=pdb_filter, run_filter=run_filter)

@@ -4,7 +4,7 @@ Author : Rick Vonk
 
 This code is made for the Alpha/beta combining pipeline. 
 The intent of this code is to standardize the method of tarring large data file locaitons created within the pipeline. 
-The code required only 2 inputs: a template and the directory wanting to tar.
+The code required only 1 input: the directory wanting to tar.
 
 Input:
     - Template, standardized
@@ -22,6 +22,7 @@ Output:
 import os
 import subprocess
 import sys
+from pathlib import Path
 # ----------------- code ------------------ #
 
 def tar_remove(dir_to_tar):
