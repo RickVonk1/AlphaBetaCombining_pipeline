@@ -71,7 +71,7 @@ def main(input_dir, output_dir, cores, cluster=True, pdb_filter=None, run_filter
         
         # 4. Tidying up
         shutil.rmtree(tmp_pdb_work)
-        print(f"--- Doen with {pdb_id} ---")
+        print(f"--- Done with {pdb_id} ---")
 
 def combine_ft_runs(input_dir, pdb_filter=None, run_filter=None):
     headers = ["Rotation Index", "Translation (x)", "Translation (y)", "Translation (z)",

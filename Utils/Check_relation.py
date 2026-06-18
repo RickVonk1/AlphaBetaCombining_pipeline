@@ -10,7 +10,7 @@ import numpy as np
 import pandas as pd
 
 #----------------- inputs ------------------#
-csv_file = '/projects/0/prjs1135/report_Rick/3_Jolada_data/Experiments/Combined_results/Swift_Combined_data.csv'
+csv_file = '/projects/0/prjs1135/report_Rick/4_Haddock_config_experimentation/experiments/test_set_redo/Result/test_set_redo.csv'
 
 # ----------------- code ------------------ #
 
@@ -24,9 +24,14 @@ def df_maker(csv_file, column_wanted, column_id):
     
     return df_modified
 
-def df_averaging(df,column_id,  column_name, new_name):
+def df_averaging(df, column_id, column_name, new_name, new_id_name=None):
     result = df.groupby(column_id)[column_name].mean().reset_index()
-    result = result.rename(columns={column_name:new_name})
+    
+    rename_dict = {column_name: new_name}
+    if new_id_name:
+        rename_dict[column_id] = new_id_name
+        
+    result = result.rename(columns=rename_dict)
     
     return result
 
@@ -57,12 +62,12 @@ def correlation(df1, df2, sort_by):
 #----------------- Activation ------------------#
 if __name__ == '__main__':
 
-    df1_base = df_maker(csv_file, 'properly_docked_model_count', 'base_ID')
+    df1_base = df_maker(csv_file, 'confidence', 'experiment')
     #df1_avg = df_averaging(df_af_unf,'base_ID','AF3_confidence_score', 'AF3_score')
 
-    df2_base = df_maker(csv_file,'avg_AF3_confidence','base_ID')
-    #df2_avg = df_averaging(df_docking_unf,'base_ID','proper_docking','docking_factor')
+    df2_base = df_maker(csv_file,'deltaG','experiment')
+    #df2_avg = df_averaging(df2_base,'experiment_id','proper_docking','docking_factor', new_id_name='base_ID')
 
-    correlation(df1_base, df2_base, 'base_ID')
+    correlation(df1_base, df2_base, 'experiment')
 
 

@@ -56,7 +56,6 @@ def file_gen(output_dir):
     txt_file = os.path.join(output_dir, 'docking_analysis_file.txt')
     with open (txt_file,'w',newline='') as f:
         print('The following is the analysis of the docking orientations of the generated AF3 structures \n', file=f)
-        print('Rick did a stupid and somehow removed all files for tcr_alpha_3', file=f)
     
     return txt_file
 
@@ -92,6 +91,64 @@ def docking_af3_corrolation_plot(df_modified, output_dir):
     plt.tight_layout()
 
     plot_out = os.path.join(output_dir, 'Correlation_plot_docking_AF3-score.png')
+    plt.savefig(plot_out, dpi=300, bbox_inches='tight')
+    plt.close()
+
+    return
+
+def Combined_corr_plot(df_modified, output_dir):
+    fig, ax = plt.subplots(figsize=(9, 6))
+
+    metrics = ['docking_orientation','Reverse_true_docking','proper_docking']
+
+    status = sorted(list({val for col in metrics for val in df_modified[col].dropna().unique()}))
+
+    colour = ['#1f77b4', '#ff7f0e', '#2ca02c']
+    colour_dict = dict(zip(status, colour))
+
+    legend_handles = {}
+    for i, metric in enumerate(metrics):
+        base_pos = i * 3
+
+        for j, i_status in enumerate(status): 
+            subset = df_modified[df_modified[metric] == i_status]['AF3_confidence_score']. dropna()
+
+            box_pos = base_pos + (j *0.6)
+
+            box = ax.boxplot(
+                subset,
+                positions=[box_pos],
+                widths=0.5,
+                patch_artist=True,
+                manage_ticks=False,
+            )
+            for patch in box['boxes']:
+                patch.set_facecolor(colour_dict[i_status])
+                patch.set_alpha(0.7)
+
+            if i_status not in legend_handles:
+                legend_handles[i_status] = box['boxes'][0]
+
+    label_pos = [i * 3 + ((len(status) - 1) * 0.3) for i in range(len(metrics))]
+    ax.set_xticks(label_pos)
+    ax.set_xticklabels(metrics)
+    ax.set_xlim(-0.5, label_pos[-1] +1)
+
+    ax.set_title(f'Plot of AlphaFold3-score and docking results, based on {len(df_modified.index)} models.', fontweight='bold')
+    ax.set_xlabel('Docking metrics')
+    ax.set_ylabel('AF3 Confidence Score')
+
+    ax.legend(
+        legend_handles.values(),
+        legend_handles.keys(),
+        title= 'Status/Value',
+        bbox_to_anchor=(1.05,1),
+        loc='upper left'
+    )
+    
+    plt.tight_layout()
+
+    plot_out = os.path.join(output_dir, 'New_Correlation_plot_docking_AF3-score.png')
     plt.savefig(plot_out, dpi=300, bbox_inches='tight')
     plt.close()
 
@@ -224,6 +281,7 @@ def CSV_maker(df, result_dir, name):
     return
 
 
+
 #----------------- Activation ------------------#
 # Extra
 Result_dir = os.path.join(Experiment_dir, 'Combined_results')
@@ -236,6 +294,8 @@ if __name__ == "__main__":
     txt_file = file_gen(Result_dir)
 
     docking_af3_corrolation_plot(modified_data, Result_dir)
+    Combined_corr_plot(modified_data, Result_dir)
+
     Heatmap_success_rate(modified_data, Result_dir)
     Analysis(modified_data, Result_dir, txt_file)
 

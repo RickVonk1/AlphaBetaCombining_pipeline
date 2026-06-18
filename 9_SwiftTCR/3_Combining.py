@@ -15,14 +15,15 @@ Output:
 import os
 import glob
 import subprocess
+import shutil
 import pandas as pd
 from pathlib import Path
 
 
 #----------------- inputs ------------------#
-exp_dir = '/projects/0/prjs1135/report_Rick/3_Jolada_data/Experiments'
+exp_dir = '/projects/0/prjs1135/report_Rick/4_Haddock_config_experimentation/experiments'
 
-Experiment_name = 'tcr_alpha_11'
+Experiment_name = 'test_set_redo'
 
 # ----------------- code ------------------ #
 def combine_results(experiment_dir, experiment_name, template):
@@ -34,8 +35,10 @@ def combine_results(experiment_dir, experiment_name, template):
         python_script = os.path.join(template,'combine_models_ensemble.py')
         output_dir = os.path.join(swift_dir, case,'Swift_output')
         combined_dir = os.path.join(swift_dir, case,'Swift_combined')
-        os.makedirs(combined_dir, exist_ok=True)
-
+        if os.path.exists(combined_dir):
+            shutil.rmtree(combined_dir)
+        
+        os.makedirs(combined_dir)
 
         with open(bash_template, 'r') as f:
             contents = f.read()

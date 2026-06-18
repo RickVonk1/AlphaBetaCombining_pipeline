@@ -8,7 +8,6 @@ aswel as a txt file with analytics on the 3d plot data
 Input:
     - Total experiment folder
     - metrics wanted for plotting
-    - highlighted cases for plotting
     - view angle for 3d plot
 
 Output:
@@ -36,9 +35,8 @@ working_dir = '/projects/0/prjs1135/report_Rick/3_Jolada_data/Experiments'
 plot_view_angle= [60,-30] # standard is [30,-60]
 
 # total possibilities : ['AF3_confidence', 'total_energy', 'elec_energy','deltaG', 'haddock_score']
-metrics = ['AF3_confidence', 'haddock_score', 'deltaG', 'elec_energy']
+metrics = ['AF3_confidence', 'haddock_score', 'deltaG']
 
-highlight = ['a1_b12', 'a1_b8', 'a10_b8', 'a10_b11', 'a11_b12', 'a11_b4', 'a11_b6', 'a11_b10', 'a2_b7', 'a2_b12', 'a2_b11', 'a2_b1', 'a2_b2', 'a3_b11', 'a3_b8', 'a3_b7', 'a3_b1', 'a3_b12', 'a4_b8', 'a4_b7', 'a4_b12', 'a5_b10', 'a5_b4', 'a6_b8', 'a7_b12', 'a7_b8', 'a7_b10', 'a8_b11', 'a9_b11', 'a9_b8'] 
 
 
 # ----------------- code ------------------ #
@@ -111,57 +109,18 @@ def Coordinate_collection(df_combined):
 
     return coordinate_xyz
 
-def Plotting_3d(data_dict, output_dir, plot_view_angle=None):
-    fig = plt.figure(figsize=(10, 8))
+def Plotting_3d(df_combined, selection, output_dir, plot_view_angle=None):
+    fig = plt.figure(figsize=(12, 10))
     ax = fig.add_subplot(projection='3d')
-    xs_labels = sorted(list(set(val[0] for val in data_dict.values())), key=lambda x: int(x[1:]))
-    ys_labels = sorted(list(set(val[1] for val in data_dict.values())), key=lambda x: int(x[1:]))
+    
+    # 1. Extract unique labels and sort them naturally
+    xs_labels = sorted(list(set(base.split('_')[0] for base in df_combined['base_ID'])), key=lambda x: int(x[1:]))
+    ys_labels = sorted(list(set(base.split('_')[1] for base in df_combined['base_ID'])), key=lambda x: int(x[1:]))
 
     x_map = {label: i for i, label in enumerate(xs_labels)}
     y_map = {label: i for i, label in enumerate(ys_labels)}
 
-    xpos = []
-    ypos = []
-    dz = []
-
-    for key, val in data_dict.items():
-        x_label, y_label, height = val
-        xpos.append(x_map[x_label])
-        ypos.append(y_map[y_label])
-        dz.append(height)
-
-    zpos = np.zeros(len(dz))
-    dx = dy = 0.4 
-
-    ax.bar3d(xpos, ypos, zpos, dx, dy, dz, color='skyblue', edgecolor='black', linewidth=0.5, alpha=0.8, zsort='average')
-    ax.set_xticks([i + 0.25 for i in range(len(xs_labels))])
-    ax.set_xticklabels(xs_labels)
-    ax.set_yticks([i + 0.25 for i in range(len(ys_labels))])
-    ax.set_yticklabels(ys_labels)
-
-    ax.set_xlabel('A-chain')
-    ax.set_ylabel('B-Chain')
-    ax.set_zlabel('normalised Totals')
-
-    if not plot_view_angle:
-        plot_view_angle = [30, -60]
-    ax.view_init(elev=plot_view_angle[0],azim=plot_view_angle[1])
-
-    plt.savefig(os.path.join(output_dir,'3d_plot'), dpi=300)
-    plt.close()
-    return
-
-def Plotting_1d(df_combined, output_dir, highlight):
-    df = df_combined.copy()
-    numeric_cols = df.columns.drop('base_ID')
-    df['Total'] = df[numeric_cols].sum(axis=1)
-    
-    df = df.sort_values(by='Total', ascending=False).reset_index(drop=True)
-    ids = df['base_ID'].tolist()
-    x = np.arange(len(ids))
-    bottom = np.zeros(len(ids))
-
-    edge_colors = ['black' if i in highlight else 'none' for i in ids]
+    # Color map aligned with your data
     color_map = {
         'norm_AF3_confidence': '#1f77b4',
         'norm_total_energy': '#ff7f0e',
@@ -170,24 +129,84 @@ def Plotting_1d(df_combined, output_dir, highlight):
         'norm_haddock_score' : '#FC9483'
     }
 
-    plt.figure(figsize=(12, 6))
-
-    for dataset_name in numeric_cols:
-        values = df[dataset_name].values
-        plt.bar(x, values, bottom=bottom, edgecolor=edge_colors, 
-                linewidth=1.5, color=color_map.get(dataset_name, 'gray'), label=dataset_name)
-        
-        bottom += values
+    # Tweaked bar dimensions: slightly narrower (0.35 instead of 0.4) 
+    # to create visual spacing channels between rows
+    dx = dy = 0.35
     
-    plt.xticks(x, ids, rotation=45, ha='right', fontsize=6)
-    plt.xlabel('alpha/beta chain combination')
-    plt.ylabel('Normalized Combined Score')
-    plt.title('1d plot of all cases')
-    plt.legend()
-    plt.tight_layout()
+    # Track the current bottom (Z position) for each (X, Y) coordinate
+    zpos_grid = np.zeros((len(xs_labels), len(ys_labels)))
 
-    plot_out = os.path.join(output_dir,'1d_plot')
-    plt.savefig(plot_out, dpi=300)
+    # --- THE FIX: STEP A. Build complete tower components first ---
+    # We will group all segments belonging to a specific (x, y) tower together
+    towers = {}
+
+    for dataset_name in selection:
+        for _, row in df_combined.iterrows():
+            base_id = row['base_ID']
+            parts = base_id.split('_')
+            x_idx = x_map[parts[0]]
+            y_idx = y_map[parts[1]]
+            
+            grid_key = (x_idx, y_idx)
+            if grid_key not in towers:
+                towers[grid_key] = []
+                
+            height = row[dataset_name]
+            z_bottom = zpos_grid[x_idx, y_idx]
+            
+            # Append this segment's layout properties
+            towers[grid_key].append({
+                'z': z_bottom,
+                'dz': height,
+                'color': color_map.get(dataset_name, 'gray'),
+                'label': dataset_name
+            })
+            
+            # Update grid height tracker for the next feature in the selection stack
+            zpos_grid[x_idx, y_idx] += height
+
+    # --- THE FIX: STEP B. Sort total towers by depth from the camera view ---
+    # Sorting key: items at the back of the grid (high X, low Y for azim=-60) 
+    # must be rendered FIRST so newer/closer elements overlap them naturally.
+    sorted_grid_keys = sorted(towers.keys(), key=lambda k: (k[0] - k[1]), reverse=True)
+
+    # --- THE FIX: STEP C. Render tower by tower, from back to front ---
+    tracked_labels = set()
+    
+    for x_idx, y_idx in sorted_grid_keys:
+        # Render the stacked segments within this specific column
+        for segment in towers[(x_idx, y_idx)]:
+            
+            # Ensure each unique metric type appears only once in the legend
+            label = segment['label'] if segment['label'] not in tracked_labels else ""
+            if label:
+                tracked_labels.add(label)
+                
+            ax.bar3d(x_idx, y_idx, segment['z'], dx, dy, segment['dz'], 
+                     color=segment['color'], 
+                     edgecolor='black', linewidth=0.3, alpha=0.85,
+                     zsort='average', label=label)
+
+    # 3. Formatting
+    ax.set_xticks([i + (dx / 2) for i in range(len(xs_labels))])
+    ax.set_xticklabels(xs_labels)
+    ax.set_yticks([i + (dy / 2) for i in range(len(ys_labels))])
+    ax.set_yticklabels(ys_labels)
+
+    ax.set_xlabel('A-chain', labelpad=10)
+    ax.set_ylabel('B-Chain', labelpad=10)
+    ax.set_zlabel('Normalized Totals Stacked', labelpad=10)
+
+    # Cleaned up Legend positioning
+    ax.legend(loc='upper left', bbox_to_anchor=(0.85, 0.95), fontsize=15)
+
+    # Slightly higher elevation angle (35 instead of 30) prevents tall front bars 
+    # from entirely eclipsing shorter back rows.
+    if not plot_view_angle:
+        plot_view_angle = [35, -60]
+    ax.view_init(elev=plot_view_angle[0], azim=plot_view_angle[1])
+
+    plt.savefig(os.path.join(output_dir, 'New_3d_plot.png'), dpi=300, bbox_inches='tight')
     plt.close()
     return
 
@@ -418,17 +437,18 @@ def Heatmap_alpha_beta_total_comparison(df_combined, output_dir):
     vmin_val = np.nanmin(success_matrix.values)
     vmax_val = np.nanmax(success_matrix.values)
 
-    color_threshold = vmin_val + (vmax_val - vmin_val) * 0.4
+    color_threshold = vmin_val + (vmax_val - vmin_val) * 0.6
     fig, ax = plt.subplots(figsize=(10, 6))
     im = ax.imshow(success_matrix.values, cmap="YlGnBu", vmin=vmin_val, vmax=vmax_val, origin="upper")
 
     cbar = ax.figure.colorbar(im, ax=ax)
-    cbar.ax.set_ylabel("Combined normalised score", rotation=-90, va="bottom")
+    cbar.ax.set_ylabel("Combined normalised score", rotation=-90, va="bottom", fontsize=15)
+    cbar.ax.tick_params(labelsize=12)
 
     ax.set_xticks(np.arange(len(success_matrix.columns)))
     ax.set_yticks(np.arange(len(success_matrix.index)))
-    ax.set_xticklabels(success_matrix.columns)
-    ax.set_yticklabels(success_matrix.index)
+    ax.set_xticklabels(success_matrix.columns, fontsize=15)
+    ax.set_yticklabels(success_matrix.index, fontsize=15)
 
     for i in range(len(success_matrix.index)):
         for j in range(len(success_matrix.columns)):
@@ -447,63 +467,11 @@ def Heatmap_alpha_beta_total_comparison(df_combined, output_dir):
             )
 
     ax.set_title("Totals score per alpha/beta chain combination")
-    ax.set_ylabel("A chain")
-    ax.set_xlabel("B chain")
+    ax.set_ylabel("A chain", fontsize=15)
+    ax.set_xlabel("B chain", fontsize=15)
     plt.tight_layout()
 
-    plot_out = os.path.join(output_dir, 'Heatmap_chain_and_totals_comparison.png')
-    plt.savefig(plot_out, dpi=300, bbox_inches='tight')
-    plt.close()
-    return
-
-def heatmap_weighted_alpha_chain(df_weighted_heatmap, output_dir, threshold_val=0):
-    success_matrix = df_weighted_heatmap.pivot_table(
-    index="a_group", columns="b_group", values="Adjusted_Total",
-    )
-
-    sorted_b = sorted(success_matrix.columns, key=lambda x: int(x.replace("b", "")))
-    sorted_a = sorted(success_matrix.index, key=lambda x: int(x.replace("a", "")))
-    success_matrix = success_matrix.reindex(index=sorted_a, columns=sorted_b)
-
-    vmin_val = np.nanmin(success_matrix.values)
-    vmax_val = np.nanmax(success_matrix.values)
-
-    color_threshold = vmin_val + (vmax_val - vmin_val) * 0.6
-    fig, ax = plt.subplots(figsize=(10, 6))
-    im = ax.imshow(success_matrix.values, cmap="YlGnBu", vmin=vmin_val, vmax=vmax_val, origin="upper")
-
-    cbar = ax.figure.colorbar(im, ax=ax)
-    cbar.ax.set_ylabel("weighted normalised score", rotation=-90, va="bottom")
-
-    ax.set_xticks(np.arange(len(success_matrix.columns)))
-    ax.set_yticks(np.arange(len(success_matrix.index)))
-    ax.set_xticklabels(success_matrix.columns)
-    ax.set_yticklabels(success_matrix.index)
-
-    for i in range(len(success_matrix.index)):
-        for j in range(len(success_matrix.columns)):
-            val = success_matrix.values[i, j]
-            if pd.isna(val):
-                continue
-            if val < threshold_val:
-                continue
-            text_color = "white" if val > color_threshold else "black"
-            ax.text(
-                j,
-                i,
-                f"{val:.2f}",
-                ha="center",
-                va="center",
-                color=text_color,
-                fontweight="bold",
-            )
-
-    ax.set_title(f"weighted score per alpha/beta chain combination, with threshold {threshold_val}")
-    ax.set_ylabel("A chain")
-    ax.set_xlabel("B chain")
-    plt.tight_layout()
-
-    plot_out = os.path.join(output_dir, 'Heatmap_weighted_alpha_chain.png')
+    plot_out = os.path.join(output_dir, 'New_Heatmap_chain_and_totals_comparison.png')
     plt.savefig(plot_out, dpi=300, bbox_inches='tight')
     plt.close()
     return
@@ -588,10 +556,7 @@ def Analytics(df_combined, coordinates, output_dir, selection):
         print('The following list is from the weighted alpha chains, with a threshold of > 0.1', file=f)
         print(f'Highlight : {print_list_weighted} \n', file=f)
 
-
-
-    return df_present
-
+    return 
 
 
 #----------------- Activation ------------------#
@@ -610,12 +575,9 @@ if __name__ == "__main__":
     combined_data_df, csv_file = Calculation_totals(Norm_data, selection, Result_dir)
     coordinates = Coordinate_collection(combined_data_df)
 
-    Plotting_3d(coordinates, Result_dir, plot_view_angle)
-    Plotting_1d(combined_data_df, Result_dir, highlight)
+    Plotting_3d(combined_data_df, selection, Result_dir, plot_view_angle)
     Plotting_HTML(combined_data_df, Result_dir)
     Heatmap_alpha_beta_total_comparison(combined_data_df, Result_dir)
 
-    weighted_heatmap_data = Analytics(combined_data_df, coordinates, Result_dir, selection)
-    heatmap_weighted_alpha_chain(weighted_heatmap_data, Result_dir, threshold_val=0.1)
-
+    Analytics(combined_data_df, coordinates, Result_dir, selection)
 
