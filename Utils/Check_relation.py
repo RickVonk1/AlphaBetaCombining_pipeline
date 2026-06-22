@@ -10,7 +10,7 @@ import numpy as np
 import pandas as pd
 
 #----------------- inputs ------------------#
-csv_file = '/projects/0/prjs1135/report_Rick/4_Haddock_config_experimentation/experiments/test_set_redo/Result/test_set_redo.csv'
+csv_file = '/projects/0/prjs1135/report_Rick/3_Jolada_data/Experiments/Combined_results/3D_plot_info.csv'
 
 # ----------------- code ------------------ #
 
@@ -62,12 +62,12 @@ def correlation(df1, df2, sort_by):
 #----------------- Activation ------------------#
 if __name__ == '__main__':
 
-    df1_base = df_maker(csv_file, 'confidence', 'experiment')
+    df1_base = df_maker(csv_file, 'norm_haddock_score', 'base_ID')
     #df1_avg = df_averaging(df_af_unf,'base_ID','AF3_confidence_score', 'AF3_score')
 
-    df2_base = df_maker(csv_file,'deltaG','experiment')
+    df2_base = df_maker(csv_file,'norm_deltaG','base_ID')
     #df2_avg = df_averaging(df2_base,'experiment_id','proper_docking','docking_factor', new_id_name='base_ID')
 
-    correlation(df1_base, df2_base, 'experiment')
+    correlation(df1_base, df2_base, 'base_ID')
 
 

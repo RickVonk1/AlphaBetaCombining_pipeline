@@ -28,9 +28,9 @@ from Bio import PDB
 from pathlib import Path
 
 #----------------- inputs ------------------#
-Exp_dir = '/projects/0/prjs1135/report_Rick/3_Jolada_data/Experiments'
+Exp_dir = '/projects/0/prjs1135/report_Rick/4_Haddock_config_experimentation/experiments'
 
-experiment= 'tcr_alpha_3'
+experiment= 'test_set_rs3'
 
 zipping = False
 
