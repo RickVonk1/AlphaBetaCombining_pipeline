@@ -37,6 +37,8 @@ def Experiment_maker(output_dir, name):
     os.makedirs(os.path.join(output_dir,'2_AF','Process_2','Raw_TCRs'), exist_ok=True)
     os.makedirs(os.path.join(output_dir,'2_AF','Process_2','Renumbered_TCR'), exist_ok=True)
     os.makedirs(os.path.join(output_dir,'2_AF','Process_2','TCR_post'), exist_ok=True)
+    os.makedirs(os.path.join(output_dir,'Result'), exist_ok=True)
+    os.makedirs(os.path.join(output_dir,'input_pdb'), exist_ok=True)
     return
 
 def AF3_chains_maker(output_dir, chains_file, target):

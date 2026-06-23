@@ -8,15 +8,16 @@ Pipeline scripts
     |   |   └──Alpha_Beta_single_chains.csv
     |   └──1_experiment_maker_AF3_chain.py
     |
-    |   [AF3 pipeline by Dario]
+    ├──2_AF3
+    |   └── [AF3 pipeline by Dario]
     |
-    ├──2_csv-data
+    ├──3_csv-data
     |   ├──1_make_confidence_file_and_fill.py
     |   ├──2_Docking_side_addition.py
     |   ├──calc_incident_crossing_angle.py 
     |   └──filter_docking_side.py 
     |   
-    ├──3_haddock
+    ├──4_haddock
     |   ├──required_for_scripts
     |   |   ├──runs_template.sh
     |   |   ├──Template.cfg
@@ -25,16 +26,20 @@ Pipeline scripts
     |   ├──2_make_haddock_cfg__and_activate.py 
     |   └──3_combine_and_plot.py    
     |
-    ├───4_Plotting_Analysis
+    ├──5_Plotting_Analysis
     |   ├──Combining_plotting.py
     |   ├──Check_relation.py
     |   └──docking_comparison.py
-    └──9_pre-pipeline_scripts
-        ├──json
-        |   └──[list of json files of individual chains]
-        ├──Seq_and_json_maker.py
-        └──murine_combined_seq_CSV_file.csv
-
+    ├──9_pre-pipeline_scripts
+    |   ├──json
+    |   |   └──[list of json files of individual chains]
+    |   ├──Seq_and_json_maker.py
+    |   └──murine_combined_seq_CSV_file.csv
+    |
+    └──Utils
+        ├──Check_relation.py
+        ├──suggested_combinaiton_csv_maker.py
+        └──Tar_and_remove.py
 
 
 
