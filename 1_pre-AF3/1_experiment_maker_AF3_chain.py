@@ -32,6 +32,7 @@ target_a_chain = 'a3'
 
 # ----------------- code ------------------ #
 def Experiment_maker(output_dir, name):
+    # Makes folders used for the AF3 pipeline
     os.makedirs(output_dir, exist_ok=True)
     os.makedirs(os.path.join(output_dir,'2_AF','Process_1'), exist_ok=True)
     os.makedirs(os.path.join(output_dir,'2_AF','Process_2','Raw_TCRs'), exist_ok=True)
@@ -42,7 +43,7 @@ def Experiment_maker(output_dir, name):
     return
 
 def AF3_chains_maker(output_dir, chains_file, target):
-    
+    # Combines the TCR sequences wiht the given MHC sequence
     with open (chains_file,'r') as x:
         chains = csv.reader(x)
         header = next(chains)

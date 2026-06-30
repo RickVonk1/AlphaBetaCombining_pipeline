@@ -27,6 +27,11 @@ import pandas as pd
 from Bio import PDB
 from pathlib import Path
 
+project_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(project_dir)
+
+from Utils.Tar_and_remove import tar_remove
+
 #----------------- inputs ------------------#
 Exp_dir = '/projects/0/prjs1135/report_Rick/4_Haddock_config_experimentation/experiments'
 
@@ -36,9 +41,8 @@ zipping = False
 
 # ----------------- code ------------------ #
 def tsv_file_maker(Working_dir):
-    """
-    This function makes a tsv file that is used in further functions, the tsv file contains chainn info for each model applied
-    """
+    # This function makes a tsv file that is used in further functions, the tsv file contains chainn info for each model applied
+
     files_dir = os.path.join(os.path.dirname(Working_dir), 'Intermediate_files')
     os.makedirs(files_dir,exist_ok=True)
     tsv_path = os.path.join(files_dir, 'tsv_for_orientation.tsv')
@@ -58,7 +62,7 @@ def tsv_file_maker(Working_dir):
     return tsv_path
 
 def cif2pdb(cif_filepath, pdb_filepath):
-    """Convert a CIF file to PDB format using Biopython."""
+    # Convert a CIF file to PDB format using Biopython.
     parser = PDB.MMCIFParser(QUIET=True)
     structure = parser.get_structure('structure', cif_filepath)
     io = PDB.PDBIO()
@@ -66,7 +70,7 @@ def cif2pdb(cif_filepath, pdb_filepath):
     io.save(pdb_filepath)
 
 def pdb_maker(Working_dir):
-    """Iterates through cif folder and relocates and changed each file to a pdb(folder)"""
+    # Iterates through cif folder and relocates and changed each file to a pdb(folder)
     cif_dir = os.path.join(Working_dir,'Process_2/TCR_post')
     cif_files = glob.glob(f'{cif_dir}/*.cif')
     output_dir = os.path.join(os.path.dirname(Working_dir),'input_pdb')
@@ -77,9 +81,8 @@ def pdb_maker(Working_dir):
     return output_dir
 
 def crossing_angle_calc(pdb_loc, tsv_file, Working_dir, swiftTCR_utils,calc_incident_crossing_angle= '/home/rvonk1/3_Jolanda_data_Pipeline/Script_pipeline/2_csv-data/calc_incident_crossing_angle.py'):
-    """
-    This function uses calc_incident_crossing_angle.py to calculate the crossing angle of MHC
-    """
+    # This function uses calc_incident_crossing_angle.py to calculate the crossing angle of MHC
+    
     files_dir = os.path.join(os.path.dirname(Working_dir), 'Intermediate_files')
 
     subprocess.run([
@@ -96,7 +99,8 @@ def crossing_angle_calc(pdb_loc, tsv_file, Working_dir, swiftTCR_utils,calc_inci
     return CA_csv
 
 def csv_addition(Working_dir, CA_csv):
-    """Updates the csv file from the previous script with the crossing angle information"""
+    #Updates the csv file from the previous script with the crossing angle information
+
     files_dir = os.path.join(os.path.dirname(Working_dir), 'Intermediate_files')
     csv_file = os.path.join(files_dir, 'Confidence_docking_csv.csv')
 
@@ -111,7 +115,7 @@ def csv_addition(Working_dir, CA_csv):
     return csv_file
 
 def analytics_docking_crossing(df,variable_column, highlight):
-    """Function used for analytics of the generated structures"""
+    # Function used for analytics of the generated structures
 
     counts = df.groupby('ID')[variable_column].value_counts().unstack(fill_value=0)
     for col in [True, False]:
@@ -130,9 +134,7 @@ def analytics_docking_crossing(df,variable_column, highlight):
     return result_list
 
 def run_analytics(csv_file,Working_dir, highlight):
-    """
-    Creates a .txt file with some analytics on the generated structures sorted by base_ID
-    """
+    #Creates a .txt file with some analytics on the generated structures sorted by base_ID
 
     files_dir = os.path.join(os.path.dirname(Working_dir), 'Intermediate_files')
     txt_file = os.path.join(files_dir,'csv_Analytics.txt')
@@ -166,7 +168,7 @@ def run_analytics(csv_file,Working_dir, highlight):
     return
 
 def zipping_af3_files(template, Working_dir):
-    """File to zip 2_AF files to reduce sproject space"""
+    # File to zip 2_AF files to reduce sproject space
     Working_dir = os.path.abspath(Working_dir)
     parent_dir = os.path.dirname(Working_dir)
     folder_name = os.path.basename(Working_dir)
@@ -196,7 +198,6 @@ def zipping_af3_files(template, Working_dir):
 
 #----------------- Activation ------------------#
 project_dir = os.path.join(Exp_dir, experiment, '2_AF')
-swiftTCR_utils = '/home/rvonk1/swifttcr/utils'
 
 script_location = Path(__file__).resolve()
 script_dir = script_location.parent
@@ -211,7 +212,7 @@ if __name__ == "__main__":
         pdb_location,
         tsv,
         project_dir,
-        swiftTCR_utils,
+        swiftTCR_utils = '/home/rvonk1/swifttcr/utils',
         os.path.join(script_dir,'calc_incident_crossing_angle.py')
     )
     csv_file = csv_addition(project_dir, CA_csv)

@@ -27,7 +27,8 @@ working_dir = '/projects/0/prjs1135/report_Rick/3_Jolada_data/Experiments'
 experiment = 'tcr_alpha_3'
 
 # ----------------- code ------------------ #
-def Folder_maker(experiment_name, output_dir):   
+def Folder_maker(experiment_name, output_dir):
+    # Creates more folders and saves the pdb_input folder
     exp_path = os.path.join(output_dir, experiment_name)
     pdb_loc = os.path.join(exp_path, "input_pdb")
     result_loc = os.path.join(exp_path, "Result")
@@ -40,6 +41,8 @@ def Folder_maker(experiment_name, output_dir):
     return pdb_loc
 
 def pdb_input_remapping(source_folder, orientation_csv):
+    # This remaps pdb files to go from 5 chains to 3 chains by combinding TCR and MHC into 1.
+
     df = pd.read_csv(orientation_csv)
     valid_ids = df[(df['docking_orientation'] == True) & (df['Reverse_true_docking'] == True)]['experiment_id'].tolist()
     count = 0

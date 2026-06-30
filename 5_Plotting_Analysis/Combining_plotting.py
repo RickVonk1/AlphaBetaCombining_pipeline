@@ -476,6 +476,51 @@ def Heatmap_alpha_beta_total_comparison(df_combined, output_dir):
     plt.close()
     return
 
+def List_maker(data, group, print_file):
+    # top 5 with threshold per alpha chain
+    threshold = 1.3
+    df_top5_per_group = (
+        data[data['Total'] > threshold]
+        .sort_values(by=[group, 'Total'], ascending=[True, False])
+        .groupby(group)
+        .head(5)
+    )
+
+    # bottom 5 with threshold per alpha chain 
+    df_bottom5_per_group = (
+        data[data['Total'] < threshold]
+        .sort_values(by=[group, 'Total'], ascending=[True, False])
+        .groupby(group)
+        .tail(5)
+    )
+
+    # Weighted alpha based on threshold
+    if group == 'a_group':
+        Adjust_tot = 'Adjusted_Total'
+    if group == 'b_group':
+        Adjust_tot = 'Adjusted_Total_beta'
+
+    filtered_df = data[(data[Adjust_tot] > 0.1) & (data['Total'] > threshold)]
+    filtered_df = filtered_df.sort_values(by=[group, Adjust_tot], ascending=[True, False])
+    
+    top_5_per_group = filtered_df.groupby(group).head(5)
+    print_list_weighted = [
+        f"{row['a_group']}_{row['b_group']}"
+        for _, row in top_5_per_group.iterrows()
+    ]
+
+    print(f'\n#-------------------- suggested highlight list {group}--------------------#', file=print_file)
+    
+    print(f'The following list is the top 5 alpha/beta combination per alpha chain, threshold = {threshold}', file=print_file)
+    print(f"Highlight : {df_top5_per_group['base_ID'].tolist()} \n", file=print_file)
+
+    print(f'The following list is the bottom 5 alpha/beta combination per alpha chain, threshold = {threshold}', file=print_file)
+    print(f"Highlight : {df_bottom5_per_group['base_ID'].tolist()} \n", file=print_file)
+
+    print('The following list is from the weighted alpha chains, with a threshold of > 0.1', file=print_file)
+    print(f'Highlight : {print_list_weighted} \n', file=print_file)
+    return
+
 def Analytics(df_combined, coordinates, output_dir, selection):
     with open (os.path.join(output_dir, 'Total_plot_analytics.txt'), 'w', newline='') as f:
         
@@ -498,8 +543,10 @@ def Analytics(df_combined, coordinates, output_dir, selection):
         df = df_combined.copy()
 
         b_group_means = df.groupby('b_group')['Total'].transform('mean')
+        a_group_means = df.groupby('a_group')['Total'].transform('mean')
         df['Adjusted_Total'] = df['Total'] - b_group_means
-        df_present = df[['a_group', 'b_group','Adjusted_Total']]
+        df['Adjusted_Total_beta'] = df['Total'] - a_group_means
+        df_present = df[['a_group', 'b_group','Adjusted_Total', 'Adjusted_Total_beta']]
         
         df_sorted = df_present.sort_values(by=['a_group', 'Adjusted_Total'], ascending=[True, False]).copy()
         df_sorted['Formatted_Value'] = df_sorted['b_group'] + ' (' + df_sorted['Adjusted_Total'].round(2).astype(str) + ')'
@@ -512,49 +559,10 @@ def Analytics(df_combined, coordinates, output_dir, selection):
 
 
         # Make a print list for future plotting for highlights
+        df_print = df[['a_group', 'b_group', 'base_ID', 'Total', 'Adjusted_Total', 'Adjusted_Total_beta']]
+        List_maker(df_print, 'a_group', f)
+        List_maker(df_print, 'b_group', f)
 
-        # top 5 with threshold per alpha chain
-        df_print = df[['a_group', 'b_group', 'base_ID', 'Total']]
-        threshold = 1.3
-        df_top5_per_group = (
-            df_print[df_print['Total'] > threshold]
-            .sort_values(by=['a_group', 'Total'], ascending=[True, False])
-            .groupby('a_group')
-            .head(5)
-        )
-
-        # bottom 5 with threshold per alpha chain 
-        df_bottom5_per_group = (
-            df_print[df_print['Total'] < threshold]
-            .sort_values(by=['a_group', 'Total'], ascending=[True, False])
-            .groupby('a_group')
-            .tail(5)
-        )
-
-
-        # Weighted alpha based on threshold
-        df_weighted = df[['a_group', 'b_group', 'Adjusted_Total', 'Total']].copy()
-
-        filtered_df = df_weighted[(df_weighted["Adjusted_Total"] > 0.1) & (df_weighted['Total'] > threshold)]
-        filtered_df = filtered_df.sort_values(by=['a_group', 'Adjusted_Total'], ascending=[True, False])
-        
-        top_5_per_group = filtered_df.groupby("a_group").head(5)
-        print_list_weighted = [
-            f"{row['a_group']}_{row['b_group']}"
-            for _, row in top_5_per_group.iterrows()
-        ]
-
-
-        print('\n#-------------------- suggested highlight list --------------------#', file=f)
-        
-        print(f'The following list is the top 5 alpha/beta combination per alpha chain, threshold = {threshold}', file=f)
-        print(f"Highlight : {df_top5_per_group['base_ID'].tolist()} \n", file=f)
-
-        print(f'The following list is the bottom 5 alpha/beta combination per alpha chain, threshold = {threshold}', file=f)
-        print(f"Highlight : {df_bottom5_per_group['base_ID'].tolist()} \n", file=f)
-
-        print('The following list is from the weighted alpha chains, with a threshold of > 0.1', file=f)
-        print(f'Highlight : {print_list_weighted} \n', file=f)
 
     return 
 

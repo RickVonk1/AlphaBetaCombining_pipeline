@@ -7,8 +7,7 @@ The intent of this code is to standardize the method of tarring large data file 
 The code required only 1 input: the directory wanting to tar.
 
 Input:
-    - Template, standardized
-    - The direcotry wanting to tar
+    - The directory wanting to tar
 
 Output:
     - A .tar.gz file with the name of the direcotry wanting to tar, in the directory above it.

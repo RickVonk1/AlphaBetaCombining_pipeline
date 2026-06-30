@@ -19,27 +19,38 @@ Output:
 """
 #------------ Import -------------#
 import csv
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
 import glob
 import os
 import shutil
 import subprocess
 import tarfile
+import sys
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 from pathlib import Path
+
+# Add the project directory to the path so we can import the modules
+project_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(project_dir)
+
+from Utils.Tar_and_remove import tar_remove
+
+
 #------------ locations / Inputs-------------#
 exp_dir = '/projects/0/prjs1135/report_Rick/4_Haddock_config_experimentation/experiments'
 
 Experiment_name = 'test_set_redo'
 
 # total possibilities : ['AF3_confidence', 'total_energy', 'elec_energy','deltaG', 'haddock_score']
-metrics = ['AF3_confidence', 'haddock_score', 'deltaG', 'elec_energy']
+metrics = ['AF3_confidence', 'haddock_score', 'deltaG']
 zipping_post = False
 
 #------------ Functions -------------#
 
 def extract_haddock_results(haddock_output, prod=False):
+    # This takes haddock results of total and elec energies and saves them as dictionairies
+
     datasets = {'total_energy': {}, 'elec_energy': {}}
     prodigy = {'deltaG': {}} if prod else {} 
     for case in glob.glob(os.path.join(haddock_output, "*")):
@@ -65,6 +76,8 @@ def extract_haddock_results(haddock_output, prod=False):
     return datasets, prodigy
 
 def extract_AF3_confidence(haddock_output, csv_file):
+    # Extract AF3 info with the selection of proper models
+
     datasets = {'AF3_confidence': {}}
     confidence = {}
     df = pd.read_csv(csv_file).set_index('experiment_id')
@@ -88,6 +101,8 @@ def extract_AF3_confidence(haddock_output, csv_file):
     return datasets
 
 def Haddock_score(haddock_output):
+    # Extract haddock score from results
+
     data = {'haddock_score':{}}
     for case in glob.glob(os.path.join(haddock_output, "*")):
         experiment_id = os.path.basename(case)
@@ -105,6 +120,8 @@ def Haddock_score(haddock_output):
     return data
 
 def normalise_data(data_dicts, prod_data):
+    # Normalised data, with the selction of positive or negative selection where applicable
+
     norm_datasets = {}
     data = data_dicts | prod_data
     for name, dataset in data.items():
@@ -209,11 +226,12 @@ def generate_rank_plot(processed_data, output_dir, name, selection):
     is_averaged = all('_rs' not in i for i in ids)
     title = f"Ranking for {name}, sorted on {'average' if is_averaged else 'best Model'} per case"
     
-    plt.xticks(x, ids, rotation=45, ha='right', fontsize=6)
-    plt.xlabel('Cases')
-    plt.ylabel('Normalized Combined Score')
-    plt.title(title)
-    plt.legend()
+    plt.xticks(x, ids, rotation=45, ha='right', fontsize=14)
+    plt.yticks(fontsize=14)
+    plt.xlabel('Cases', fontsize=14)
+    plt.ylabel('Normalized Combined Score', fontsize=14)
+    plt.title('Results of test set')
+    plt.legend(fontsize='large')
     plt.tight_layout()
 
     suffix = "average" if is_averaged else "selected"
@@ -298,36 +316,6 @@ def run_analytics(haddock_output, error_list, output_dir, name, normalised_data,
         
     return rates
 
-def zip_and_remove(haddock_output, zip_template, name):
-    haddock_output = os.path.abspath(haddock_output)
-    base_dir = os.path.dirname(haddock_output)
-    folder_name = os.path.basename(haddock_output)
-    
-    Result_dir = os.path.join(os.path.dirname(haddock_output), 'Result')
-    zip_loc = os.path.join(Result_dir, 'zipping')
-    zipping_file = f'{zip_loc}/Zipping_file_{name}.sh'
-    os.makedirs(zip_loc, exist_ok=True)
-    
-    with open(zip_template, 'r') as f:
-        contents = f.read()
-    
-    contents = contents.replace('$Result_location', str(Result_dir))
-    contents = contents.replace('$main_loc', str(base_dir))
-    contents = contents.replace('$folder_to_zip', str(folder_name))
-    
-    if os.path.isfile(os.path.join(base_dir, 'Haddock_output.tar.gz')):
-        contents = contents.replace('$name', 'Haddock_output_2')
-    else:
-        contents = contents.replace('$name', 'Haddock_output')
-        
-    contents = contents.replace('$haddock_output_loc', str(haddock_output))
-    
-    with open(zipping_file, 'w', encoding='utf-8') as f:
-        f.write(contents)
-    
-    subprocess.run(['sbatch', zipping_file])
-
-    print(f'Zipping and removing Haddock_output of {name}\nDo not touch the Haddock_output file until job is done')
 
 #------------ Main Execution -------------#
 confidence_csv = os.path.join(exp_dir,Experiment_name,'Intermediate_files', 'Confidence_docking_csv.csv')
@@ -369,4 +357,4 @@ if __name__ == "__main__":
 
     #5. Cleaning
     if zipping_post:
-        zip_and_remove(working_dir, zip_template_loc, Experiment_name)
+        tar_remove(working_dir)

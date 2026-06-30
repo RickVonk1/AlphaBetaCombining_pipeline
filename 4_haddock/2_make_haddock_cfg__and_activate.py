@@ -28,6 +28,7 @@ experiment = 'tcr_alpha_3'
 
 
 def dir_maker(pdb_dir):
+    # Makes more directories and saves their location
     pdb_working_dir = Path(pdb_dir)
     exp_name = pdb_working_dir.parent.name
 
@@ -40,6 +41,7 @@ def dir_maker(pdb_dir):
     return config_dir, runs_dir, exp_name
 
 def config_maker(template, pdb_dir, config_dir):
+    # Makes config files for each structure
 
     pdb_working_dir = Path(pdb_dir)
     for path in pdb_working_dir.glob('*') :
@@ -60,6 +62,7 @@ def config_maker(template, pdb_dir, config_dir):
     return
 
 def runs_maker(experiment_name,runs_template, runs_dir, config_dir, working_dir, group_size=50 ):
+    # This combined haddock run activations to have a set number activated
 
     files = sorted([str(config_dir / f) for f in os.listdir(config_dir)])
     iteration = 1
@@ -84,6 +87,7 @@ def runs_maker(experiment_name,runs_template, runs_dir, config_dir, working_dir,
     return 
 
 def Activation(runs_dir):
+    # Activates the run files
     run = Path(runs_dir)
     for script in sorted(run.glob('*.sh')) :
         subprocess.run(['sbatch', str(script)])

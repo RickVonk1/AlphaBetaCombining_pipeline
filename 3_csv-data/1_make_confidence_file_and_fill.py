@@ -31,10 +31,7 @@ experiment= 'test_set_rs3'
 
 # ----------------- code ------------------ #
 def confidence_extraction(Working_dir):
-    """
-    Extracts AF3 confidence scores by mapping TCR_post files back to the 
-    AF3 inference output directory structure.
-    """
+    # Extracts AF3 confidence scores by mapping TCR_post files back to the AF3 inference output directory structure.
     confidence = {}
     search_path = os.path.join(Working_dir, 'Process_2/TCR_post', '*_rs*_sample-*_model.cif')
     
@@ -68,9 +65,7 @@ def confidence_extraction(Working_dir):
     return confidence
     
 def csv_maker(Working_dir, confidence):
-    """
-    This function makes a csv file used later and fills it with the confidence score
-    """
+    # This function makes a csv file used later and fills it with the confidence score
     files_dir = os.path.join(os.path.dirname(Working_dir), 'Intermediate_files')
     os.makedirs(files_dir,exist_ok=True)
     csv_file = os.path.join(files_dir, 'Confidence_docking_csv.csv')
@@ -83,7 +78,7 @@ def csv_maker(Working_dir, confidence):
     return csv_file
 
 def aa3to1(res_name):
-    """Convert three-letter amino acid code to one-letter code."""
+    # Convert three-letter amino acid code to one-letter code
     
     AA3_TO_1 = {
     'ALA': 'A', 'ARG': 'R', 'ASN': 'N', 'ASP': 'D', 'CYS': 'C',
@@ -94,9 +89,7 @@ def aa3to1(res_name):
     return AA3_TO_1.get(res_name.upper(), 'X')
 
 def extract_residues(pdb_file):
-    """
-    Function used to extract residue info from a pdb file.
-    """
+    # Function used to extract residue info from a pdb file.
     seen = set()
     residues = []
 
@@ -117,9 +110,7 @@ def extract_residues(pdb_file):
     return residues
 
 def cdr3_finder(Working_dir):
-    """
-    This function gives iterates over a pdb folder and extracts sequence information form each pdb file in the folder.
-    """
+    # This function gives iterates over a pdb folder and extracts sequence information form each pdb file in the folder.
     seq_info = {}
     pdb_folder = os.path.join(Working_dir,'Process_2/Renumbered_TCR/renumbered')
 
@@ -158,9 +149,7 @@ def cdr3_finder(Working_dir):
     return seq_info
 
 def csv_updater_cdr3(csv_file, data):
-    """
-    This function updates the csv made previously with the new information
-    """
+    # This function updates the csv made previously with the new information
 
     df = pd.read_csv(csv_file)
     df = df.astype(str).replace('nan', '')
@@ -193,9 +182,8 @@ def csv_updater_cdr3(csv_file, data):
     return
 
 def docking_side_checker(csv_file, Working_dir):
-    """
-    This fucntion uses a fucntion from filter_docking_side.py to check if the CDR3 loop is within threshold distance of the peptide and returns True if yes, False if no.
-    """
+    # This fucntion uses a fucntion from filter_docking_side.py to check if the CDR3 loop is within threshold distance of the peptide and returns True if yes, False if no.
+
     docking_side = {}
 
     with open(csv_file, 'r') as f:
