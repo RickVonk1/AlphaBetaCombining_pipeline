@@ -1,0 +1,148 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Interactive Plot with Search & Presets</title>
+        <style>
+            body { font-family: Arial, sans-serif; margin: 20px; }
+            .controls-container { 
+                display: flex; 
+                flex-wrap: wrap; 
+                align-items: center; 
+                gap: 20px; 
+                margin-bottom: 15px; 
+            }
+            .search-container { font-size: 16px; }
+            #graphSearchInput { padding: 8px; width: 400px; border: 1px solid #ccc; border-radius: 4px; }
+            
+            .preset-container { display: flex; gap: 8px; }
+            .preset-btn {
+                padding: 8px 12px;
+                font-size: 14px;
+                font-weight: bold;
+                border: 1px solid #007bff;
+                background-color: #ffffff;
+                color: #007bff;
+                border-radius: 4px;
+                cursor: pointer;
+                transition: background-color 0.2s, color 0.2s;
+            }
+            .preset-btn:hover {
+                background-color: #007bff;
+                color: white;
+            }
+            .preset-btn.active {
+                background-color: #0056b3;
+                color: white;
+                border-color: #0056b3;
+            }
+            .clear-btn {
+                border-color: #dc3545;
+                color: #dc3545;
+            }
+            .clear-btn:hover {
+                background-color: #dc3545;
+                color: white;
+            }
+        </style>
+    </head>
+    <body>
+
+        <div class="controls-container">
+            <div class="search-container">
+                <label for="graphSearchInput"><b>Search:</b> </label>
+                <input type="text" id="graphSearchInput" placeholder="e.g. a1_b12, a7 or (a2_b7, a2_b2)">
+            </div>
+
+            <div class="preset-container">
+                <button class="preset-btn" onclick="applyPreset('top_5', this)">Top 5</button>
+                <button class="preset-btn" onclick="applyPreset('top_5_weighted', this)">Top 5 Weighted</button>
+                <button class="preset-btn" onclick="applyPreset('bottom_5', this)">Bottom 5</button>
+                <button class="preset-btn clear-btn" onclick="clearHighlights()">Clear All</button>
+            </div>
+        </div>
+
+        <div>                        <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.3.1.min.js" integrity="sha256-4rD3fugVb/nVJYUv5Ky3v+fYXoouHaBSP20WIJuEiWg=" crossorigin="anonymous"></script>                <div id="plotly-graph" class="plotly-graph-div" style="height:100%; width:100%;"></div>            <script type="text/javascript">                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("plotly-graph")) {                    Plotly.newPlot(                        "plotly-graph",                        [{"hovertemplate":"\u003cb\u003e%{x}\u003c\u002fb\u003e\u003cbr\u003enorm_AF3_confidence: %{y:.3f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#1f77b4","line":{"color":"rgba(0,0,0,0)","width":0}},"name":"norm_AF3_confidence","x":["a10_b8","a10_b11","a9_b11","a8_b11","a2_b7","a3_b1","a7_b12","a2_b11","a2_b12","a3_b8","a3_b11","a3_b7","a3_b12","a3_b3","a4_b8","a11_b12","a2_b1","a2_b2","a2_b8","a11_b4","a2_b4","a3_b2","a4_b7","a3_b9","a1_b12","a2_b10","a5_b10","a7_b8","a11_b6","a6_b8","a3_b4","a2_b9","a9_b8","a11_b10","a4_b12","a7_b10","a2_b6","a10_b12","a5_b4","a5_b8","a1_b8","a11_b9","a9_b12","a10_b1","a6_b12","a10_b7","a3_b5","a3_b6","a8_b6","a7_b2","a6_b4","a6_b6","a9_b1","a7_b4","a10_b4","a5_b6","a4_b4","a2_b3","a7_b7","a2_b5","a8_b8","a7_b6","a11_b8","a5_b12","a4_b6","a4_b1","a7_b3","a7_b1","a10_b2","a1_b11","a9_b7","a6_b7","a11_b1","a6_b1","a4_b2","a10_b6","a6_b2","a1_b4","a10_b9","a7_b9","a1_b5","a5_b7","a8_b1","a5_b1","a10_b10","a10_b5","a9_b2","a8_b9","a10_b3","a4_b11","a8_b12","a8_b2","a6_b9","a11_b7","a8_b3","a6_b3","a9_b9","a8_b7","a1_b6","a11_b11","a1_b7","a11_b5","a5_b9","a1_b1","a7_b11","a1_b3","a6_b5","a9_b5","a1_b9","a11_b3","a1_b2","a8_b4","a8_b5","a9_b3","a5_b3"],"y":{"dtype":"f8","bdata":"pk\u002f6pE\u002f67D8AAAAAAADwP3h3d3d3d+8\u002fbcEWbMEW7D\u002fg3d3d3d3dP727u7u7u+s\u002fm5mZmZmZ6T\u002fu7u7u7u7uP47jOI7jOOY\u002fcxzHcRzH6T+CLdiCLdjiP3Mcx3Ecx+k\u002fcxzHcRzH6T+TPumTPunjP+qTPumTPtk\u002f0yd90id94j85juM4juPUP6D0SZ\u002f0Sc8\u002fgNInfdIn3T+yqqqqqqrKPz2O4ziO48A\u002fMNiCLdiC3T\u002fTJ33SJ33qP5uZmZmZmeE\u002f5TiO4ziO2z+qqqqqqqrSPyIiIiIiItI\u002fchzHcRzH0T+2YAu2YAvWPzqO4ziO49g\u002fyHEcx3Ec1z+wBVuwBVvQP8O7u7u7u8s\u002fMNiCLdiC3T\u002fkOI7jOI7jPyTHcRzHcbw\u002fx3Ecx3Ec1z9nZmZmZmbWP38J7SW0l8A\u002fWlVVVVVVxT9tL6G9hPayP2ALtmALttA\u002fWlVVVVVVzT+Q4ziO4zjePzqO4ziO49g\u002fdhzHcRzHwT9dsAVbsAXbP9qCLdiCLeA\u002fgNInfdIn3T8kx3Ecx3G8P1tVVVVVVcU\u002f2IIt2IIt2D9dsAVbsAXbPwQAAAAAAMA\u002f4t3d3d3dzT8ex3Ecx3HMP4\u002fjOI7jOOY\u002fQI7jOI7jyD\u002fWJ33SJ33CPyLHcRzHccQ\u002fr6qqqqqqyj+A0id90ifNP1tVVVVVVcU\u002fVlVVVVVV1T+TPumTPunTP27BFmzBFtw\u002fJMdxHMdxvD+bmZmZmZnZPz2O4ziO48A\u002fJMdxHMdxrD9jsAVbsAW7P0CO4ziO47g\u002f+kmf9EmfxD8GW7AFW7DVP81xHMdxHLc\u002fODMzMzMzwz8kx3Ecx3GsP7xgC7ZgC8Y\u002fAKVP+qRPyj\u002foOI7jOI7DPyTHcRzHcZw\u002fdhzHcRzHwT9A6ZM+6ZPOPx3HcRzHcdQ\u002fP47jOI7jyD9bVVVVVVXFPyTHcRzHcaw\u002fsqqqqqqqyj95HMdxHMfJP0NERERERNQ\u002fYrAFW7AFuz8kx3Ecx3GsP\u002fRJn\u002fRJn9Q\u002fBAAAAAAAwD9IewntJbSnP1pVVVVVVcU\u002fpvRJn\u002fRJvz9bVVVVVVXFPwAAAAAAANA\u002fbS+hvYT2sj9bVVVVVVW1PyTHcRzHcaw\u002fW1VVVVVVxT\u002fpOI7jOI7DPyTHcRzHcZw\u002fJMdxHMdxvD8kx3Ecx3GsPyTHcRzHcZw\u002fdhzHcRzHsT8kx3Ecx3GsP20vob2E9pI\u002fJMdxHMdxnD9bVVVVVVWlPyTHcRzHcbw\u002fJMdxHMdxrD8="},"type":"bar"},{"hovertemplate":"\u003cb\u003e%{x}\u003c\u002fb\u003e\u003cbr\u003enorm_haddock_score: %{y:.3f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#FC9483","line":{"color":"rgba(0,0,0,0)","width":0}},"name":"norm_haddock_score","x":["a10_b8","a10_b11","a9_b11","a8_b11","a2_b7","a3_b1","a7_b12","a2_b11","a2_b12","a3_b8","a3_b11","a3_b7","a3_b12","a3_b3","a4_b8","a11_b12","a2_b1","a2_b2","a2_b8","a11_b4","a2_b4","a3_b2","a4_b7","a3_b9","a1_b12","a2_b10","a5_b10","a7_b8","a11_b6","a6_b8","a3_b4","a2_b9","a9_b8","a11_b10","a4_b12","a7_b10","a2_b6","a10_b12","a5_b4","a5_b8","a1_b8","a11_b9","a9_b12","a10_b1","a6_b12","a10_b7","a3_b5","a3_b6","a8_b6","a7_b2","a6_b4","a6_b6","a9_b1","a7_b4","a10_b4","a5_b6","a4_b4","a2_b3","a7_b7","a2_b5","a8_b8","a7_b6","a11_b8","a5_b12","a4_b6","a4_b1","a7_b3","a7_b1","a10_b2","a1_b11","a9_b7","a6_b7","a11_b1","a6_b1","a4_b2","a10_b6","a6_b2","a1_b4","a10_b9","a7_b9","a1_b5","a5_b7","a8_b1","a5_b1","a10_b10","a10_b5","a9_b2","a8_b9","a10_b3","a4_b11","a8_b12","a8_b2","a6_b9","a11_b7","a8_b3","a6_b3","a9_b9","a8_b7","a1_b6","a11_b11","a1_b7","a11_b5","a5_b9","a1_b1","a7_b11","a1_b3","a6_b5","a9_b5","a1_b9","a11_b3","a1_b2","a8_b4","a8_b5","a9_b3","a5_b3"],"y":{"dtype":"f8","bdata":"ouE9azPI6D8kiH2R6aXiP8ZTZC142Ns\u002frWnm5fnt3j\u002fwWOnVkGXpP0Y7bpcVLOM\u002frZRZWjzO5D9rLoukeDziP+qjuPJAzOU\u002fipFxi0sb4D+DSpJ7exzmP4hpYmTc4uI\u002fHTuI3D\u002fP4j\u002fNNTDP5V\u002fjP2OQFBnfFuc\u002fV3AxZIGY4D9npOCL\u002f\u002f3iP7ut\u002fpVNpOI\u002fRmFpoy4g2j9CZAiloNXoP+mYZZncFec\u002fVpgF11HD3z\u002fzltljZxjSP8apNud3z98\u002ftI0uN4Sg4D+tgty2EDnlP1r4PcrhreU\u002fKG\u002fp+Yqs4D9bxtu\u002fdvzkP457aMbZDdU\u002fMApfSvrK4D+O6X7luprgP3OX2Z4bt98\u002fwR2LCT3H4D94487dXFDUP68feypMtOQ\u002fzcNmCaUW3j9CkS37gKjgPwgOySPbieQ\u002fPnLnqeLG3z81DI0TDJLgP5CCuZW6MOQ\u002fT+Q3fBMI4T8GuJQwI0HcP2NIqiLzptQ\u002fTuMj1yUB4j+QGZFHQKvbP7oL1Ipjc9Q\u002fy5uSltTr3j\u002f+u281jZDdP6SvjH2kP+I\u002faNakzyIB4D+L8ke7i\u002fHUP7x5r\u002fWl8uE\u002fP0jDjiz74j+NhWzGsa\u002faP3ZH4tVWiss\u002fzOLBYrkQ3D8trTvBGbHdP95no30D7tM\u002fyCBk5lw72D89m6g8h7TbP4PV7v8pENw\u002fDa3xGqpk1j8FD8pyNBbZP5cmWvWy99Q\u002fQoW5JdEp4j+SiZT8XTjXP8E8l38t6tg\u002fUhVeg4Yf2z\u002foSYJ1BfDdP7Lwj8NIJds\u002fdTvxP0Lo3T+qa4VxA2baPwaKWzVVZ9k\u002fMrOfcCYR2D98ZcWe443DP8NqMrSzFdQ\u002f0vUWHkNQ0z99t6n95LrXPxTbn6XECsw\u002fVKK7zPbc2D+qU7d0X+vWP4DmCfQ0FtA\u002fvQtxeLrS3j+jYXVzvlHRP5TFg8VyIdA\u002fdppQQoPZ1j\u002fYmFT1KTnTPzod24qdTtI\u002f4rPTcOOU0j+UIH8EeC3VP+6L\u002fUsxzNA\u002fYeJbionk0D+sejU2fPnZPwqWc1CDTc0\u002fODflAKKg0z9zVw\u002fRnH7NP9N1NHgSV8I\u002fw4HLBYf+zz+vHvEcIZLFPxDDqiMHTLI\u002fqMy+s+zcvD\u002fUwXiad8fMP0YLSAYLUtA\u002f8ZQA\u002fa\u002fh0T\u002frQVFdrsvGP0BbfDVQKsU\u002fN\u002fa4gwLZ0T\u002f42LdMPJXCP5jR6sPE3sk\u002fqn7bBX70xj\u002fQuXY4Uj7AP5izow+e68o\u002fwr9T226mwj8="},"type":"bar"},{"hovertemplate":"\u003cb\u003e%{x}\u003c\u002fb\u003e\u003cbr\u003enorm_deltaG: %{y:.3f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#e8e337","line":{"color":"rgba(0,0,0,0)","width":0}},"name":"norm_deltaG","x":["a10_b8","a10_b11","a9_b11","a8_b11","a2_b7","a3_b1","a7_b12","a2_b11","a2_b12","a3_b8","a3_b11","a3_b7","a3_b12","a3_b3","a4_b8","a11_b12","a2_b1","a2_b2","a2_b8","a11_b4","a2_b4","a3_b2","a4_b7","a3_b9","a1_b12","a2_b10","a5_b10","a7_b8","a11_b6","a6_b8","a3_b4","a2_b9","a9_b8","a11_b10","a4_b12","a7_b10","a2_b6","a10_b12","a5_b4","a5_b8","a1_b8","a11_b9","a9_b12","a10_b1","a6_b12","a10_b7","a3_b5","a3_b6","a8_b6","a7_b2","a6_b4","a6_b6","a9_b1","a7_b4","a10_b4","a5_b6","a4_b4","a2_b3","a7_b7","a2_b5","a8_b8","a7_b6","a11_b8","a5_b12","a4_b6","a4_b1","a7_b3","a7_b1","a10_b2","a1_b11","a9_b7","a6_b7","a11_b1","a6_b1","a4_b2","a10_b6","a6_b2","a1_b4","a10_b9","a7_b9","a1_b5","a5_b7","a8_b1","a5_b1","a10_b10","a10_b5","a9_b2","a8_b9","a10_b3","a4_b11","a8_b12","a8_b2","a6_b9","a11_b7","a8_b3","a6_b3","a9_b9","a8_b7","a1_b6","a11_b11","a1_b7","a11_b5","a5_b9","a1_b1","a7_b11","a1_b3","a6_b5","a9_b5","a1_b9","a11_b3","a1_b2","a8_b4","a8_b5","a9_b3","a5_b3"],"y":{"dtype":"f8","bdata":"022jy2lg6T8gUrnGUPjlP1Xdw3Cyo+g\u002fVvcwnOwo5j8W5sFmIq\u002foPzLgo7ZEL98\u002fIzyPTVyn3z8r8YU1+QvaP5vn4BtIKeI\u002fgJ+3SXcZ4z9WEZ7HJq7jPx0Zl3Wced8\u002fjdsXBXeM3D87tE\u002fEW43iPwKXRgodq+U\u002fUAgTG6EF4T8A69rOBe\u002flPwotiMw\u002fFuc\u002f0hTHDEGo5T\u002fdZUz5OizhPxe8dwQujeQ\u002fsAwSFlkL4T8Dfdne4iXYP5JcNJaf5ts\u002fnHSXMeXr4D8c6gQZaOPfP30dlnBUf98\u002fovBryM3R5D9qzhoUT3vcP4D4kwig0eY\u002fqk2LOTy+3z8DsbM1VzDjP7aI5qxB8eQ\u002faqTQsVpZ2D+SulhPCBPbP52JvGLf\u002fOI\u002fO58qk2F84D9Q5BX75pfcP5S9Md40S+E\u002f7lzw3hG45D8QGjfid\u002f3mP5MYfQhxP9o\u002fgjb+U5TE4D8\u002fMCRbRHPWPzN8MruhTuA\u002f25ormKl24D8qaRcanL3WP\u002fPYxHX6ndg\u002f9CYM+Kgt0T\u002fytMdVQDDkP3CT7jKmfN0\u002f4EWSi8by0z9qLD\u002fNt6fbP0dJjD6EuN8\u002f+xUqefRQ1j9loI3\u002fFCXhP8r2Fi\u002fB7tA\u002fBsXTHlcB4T8mevmYUJrhP3qwmcgr9uU\u002fKnSsVhbm4T+giLca5bzeP+KOkRM1DuE\u002fsAKCIdki2j9W3cNwsqPYP1WzeQ6+gdQ\u002fc1s2BQv61z\u002f9698WAC\u002fSPwlxP1puveA\u002fsK7tXPDe4T\u002fdOwKXRgrdP\u002fKKffNLDuA\u002fb4MR\u002fOvf1j8aMwSh1v7MP3MA69rOBd8\u002fRsEdIydq3D\u002fMwjzYTOTlP3BppNCxWtk\u002fXV7gAdv91z9BMCRbRHPWP8utF6dS0+M\u002fnJ7hk9kN1T9GSYw+hLjPPwbF0x5XAdE\u002faHqGT2Y3xD\u002f1RFf6CSvZPxiSLaI5a+A\u002fU74OSziqzz8EgiHZIprTP2bohz+JAMo\u002fcGmk0LFa2T\u002fo1otTqenZP4YwsRFaEMk\u002fho7VysI82D9XR+eJrvTTP5uzBsXTHtc\u002fHt9v3O261D8txzvTBOrVPzjJdPVVntQ\u002fFebBZiKv2D\u002f+aLn14lTaP47\u002fFCUx+uA\u002f1kzkFfvm1z8R4n603HrRP5yzBsXTHtc\u002fUqnpGT6ZzT8Jaoj0Gg3YPxbmwWYir9g\u002fbpPuMqZ8zT8IXBopdKzWP7eBL0fuQNQ\u002fk8ToQ4j70T9qZWEebCbSP4Bki2jOGrQ\u002fHkYfQtyPxj8="},"type":"bar"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermapbox"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"white","showlakes":true,"showland":true,"subunitcolor":"#C8D4E3"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"light"},"paper_bgcolor":"white","plot_bgcolor":"white","polar":{"angularaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""},"bgcolor":"white","radialaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"yaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"zaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"baxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"bgcolor":"white","caxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2}}},"xaxis":{"tickfont":{"size":9},"title":{"text":"Alpha\u002fBeta Chain Combination"},"tickangle":45,"type":"category"},"legend":{"orientation":"h","yanchor":"bottom","y":1.02,"xanchor":"right","x":1},"title":{"text":"1D Interactive Plot of All Cases (Sorted by Combined Score)"},"yaxis":{"title":{"text":"Normalized Combined Score"}},"barmode":"stack","hovermode":"x unified"},                        {"responsive": true}                    )                };            </script>        </div>
+
+        <script>
+            // Safely inject Python data structures into JS via JSON
+            const originalIds = ["a10_b8", "a10_b11", "a9_b11", "a8_b11", "a2_b7", "a3_b1", "a7_b12", "a2_b11", "a2_b12", "a3_b8", "a3_b11", "a3_b7", "a3_b12", "a3_b3", "a4_b8", "a11_b12", "a2_b1", "a2_b2", "a2_b8", "a11_b4", "a2_b4", "a3_b2", "a4_b7", "a3_b9", "a1_b12", "a2_b10", "a5_b10", "a7_b8", "a11_b6", "a6_b8", "a3_b4", "a2_b9", "a9_b8", "a11_b10", "a4_b12", "a7_b10", "a2_b6", "a10_b12", "a5_b4", "a5_b8", "a1_b8", "a11_b9", "a9_b12", "a10_b1", "a6_b12", "a10_b7", "a3_b5", "a3_b6", "a8_b6", "a7_b2", "a6_b4", "a6_b6", "a9_b1", "a7_b4", "a10_b4", "a5_b6", "a4_b4", "a2_b3", "a7_b7", "a2_b5", "a8_b8", "a7_b6", "a11_b8", "a5_b12", "a4_b6", "a4_b1", "a7_b3", "a7_b1", "a10_b2", "a1_b11", "a9_b7", "a6_b7", "a11_b1", "a6_b1", "a4_b2", "a10_b6", "a6_b2", "a1_b4", "a10_b9", "a7_b9", "a1_b5", "a5_b7", "a8_b1", "a5_b1", "a10_b10", "a10_b5", "a9_b2", "a8_b9", "a10_b3", "a4_b11", "a8_b12", "a8_b2", "a6_b9", "a11_b7", "a8_b3", "a6_b3", "a9_b9", "a8_b7", "a1_b6", "a11_b11", "a1_b7", "a11_b5", "a5_b9", "a1_b1", "a7_b11", "a1_b3", "a6_b5", "a9_b5", "a1_b9", "a11_b3", "a1_b2", "a8_b4", "a8_b5", "a9_b3", "a5_b3"];
+            const presets = {"top_5": ["a3_b1", "a2_b1", "a2_b10", "a5_b10", "a11_b10", "a7_b10", "a10_b11", "a9_b11", "a8_b11", "a2_b11", "a3_b11", "a2_b12", "a7_b12", "a3_b12", "a11_b12", "a1_b12", "a2_b2", "a3_b2", "a3_b3", "a11_b4", "a2_b4", "a3_b4", "a5_b4", "a11_b6", "a2_b6", "a2_b7", "a3_b7", "a4_b7", "a10_b8", "a3_b8", "a4_b8", "a2_b8", "a7_b8", "a3_b9", "a2_b9"], "top_5_weighted": ["a3_b1", "a5_b10", "a11_b10", "a7_b10", "a8_b11", "a9_b11", "a10_b11", "a2_b11", "a3_b11", "a7_b12", "a1_b12", "a11_b12", "a2_b12", "a3_b12", "a3_b3", "a11_b4", "a5_b4", "a11_b6", "a2_b7", "a4_b7", "a3_b7", "a10_b8", "a4_b8", "a1_b8", "a6_b8", "a5_b8"], "bottom_5": ["a11_b1", "a6_b1", "a5_b1", "a8_b1", "a1_b1", "a10_b10", "a1_b11", "a4_b11", "a11_b11", "a7_b11", "a9_b12", "a6_b12", "a5_b12", "a8_b12", "a4_b2", "a6_b2", "a9_b2", "a8_b2", "a1_b2", "a8_b3", "a1_b3", "a11_b3", "a9_b3", "a5_b3", "a10_b4", "a7_b4", "a4_b4", "a1_b4", "a8_b4", "a10_b5", "a11_b5", "a6_b5", "a9_b5", "a8_b5", "a5_b6", "a7_b6", "a4_b6", "a10_b6", "a1_b6", "a6_b7", "a5_b7", "a11_b7", "a8_b7", "a1_b7", "a8_b8", "a11_b8", "a8_b9", "a6_b9", "a9_b9", "a5_b9", "a1_b9"]};
+            
+            // Centralized function to manage updating the Plotly DOM borders
+            function updateGraphHighlights(matchConditionFn) {
+                const graphDiv = document.getElementById('plotly-graph');
+                const newColors = [];
+                const newWidths = [];
+
+                originalIds.forEach((id) => {
+                    if (matchConditionFn(id)) {
+                        newColors.push('black');
+                        newWidths.push(4.0);
+                    } else {
+                        newColors.push('rgba(0,0,0,0)');
+                        newWidths.push(0.0);
+                    }
+                });
+
+                const update = {
+                    'marker.line.color': [newColors],
+                    'marker.line.width': [newWidths]
+                };
+
+                Plotly.restyle(graphDiv, update);
+            }
+
+            // 1. Text Search Input Event (Updated to support list inputs)
+            document.getElementById('graphSearchInput').addEventListener('input', function(e) {
+                clearActiveButtonStyles(); // Clear button highlights if user types
+                
+                // Remove brackets or parentheses if the user pastes them like (x1,x2) or [x1,x2]
+                let rawInput = e.target.value.replace(/[\[\]\(\)]/g, '');
+                
+                if (rawInput.trim() === "") {
+                    updateGraphHighlights(() => false); // Reset if search is empty
+                    return;
+                }
+
+                // Split by commas, trim extra spaces, and filter out any empty strings
+                const searchTerms = rawInput.split(',')
+                                            .map(term => term.trim().toLowerCase())
+                                            .filter(term => term !== "");
+
+                // Highlight an ID if it partially matches *any* of the terms in the user's list
+                updateGraphHighlights((id) => {
+                    const currentId = String(id).toLowerCase();
+                    return searchTerms.some(term => currentId.includes(term));
+                });
+            });
+
+            // 2. Preset Button Logic
+            function applyPreset(presetKey, buttonElement) {
+                document.getElementById('graphSearchInput').value = ""; // Clear text search
+                clearActiveButtonStyles();
+                buttonElement.classList.add('active'); // Style clicked button
+
+                const targetList = presets[presetKey].map(id => String(id).toLowerCase());
+                
+                // Highlight if the ID strictly exists in our preset array
+                updateGraphHighlights((id) => targetList.includes(String(id).toLowerCase()));
+            }
+
+            // 3. Helper: Clear Everything
+            function clearHighlights() {
+                document.getElementById('graphSearchInput').value = "";
+                clearActiveButtonStyles();
+                updateGraphHighlights(() => false);
+            }
+
+            // Helper to reset button color states
+            function clearActiveButtonStyles() {
+                document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
+            }
+        </script>
+
+    </body>
+    </html>
+    
