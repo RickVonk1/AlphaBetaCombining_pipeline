@@ -90,9 +90,8 @@ def json_extraction(output_dir):
 
 def Manual_addition(case_info):
     # The following cases failed with the following info:
-    # a8 ('TRAV38-2', 'TRAJ31', 'CAYRSALDNARLMF')
-    # b12 ('TRBV29-1', 'TRBJ2-7*01', 'CSVEVGMGLTYEQY')
-    # Info below was obtained by putting the gene in google's Gemini LLM
+    # a8 
+    # b12 
     case_info['a8'] = {}
     case_info['a8']['l'] = '[Confidential]'
     case_info['a8']['v'] = '[Confidential]'
