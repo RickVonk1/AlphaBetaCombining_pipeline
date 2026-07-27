@@ -12,6 +12,8 @@ Output:
     - Remapped input structures
     - Folders for future use in the pipeline
 
+Usage :
+    python /path/to/script/
 """
 #------------ Import -------------#
 import csv

@@ -13,6 +13,8 @@ output:
     - boxplot with docking/Af3 correlation
     - a heatmap with dockign success rate
 
+Usage :
+    python /path/to/script/
 """
 #------------ Import -------------#
 import os

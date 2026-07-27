@@ -4,6 +4,17 @@ Author : Rick Vonk
 
 this makes a csv file with the full complex for the combinaitons that are a resulted promising combinaiton
 
+Input:
+    - csv-file with chain sequences
+    - list of chain combinations wanted
+
+output:
+    - a csv-file with whole complex sequeces of the wanted chains
+
+Usage :
+    python /path/to/script/
+
+
 """
 #------------ Import -------------#
 import pandas as pd

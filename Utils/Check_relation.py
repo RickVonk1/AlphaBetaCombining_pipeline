@@ -4,6 +4,14 @@ Author : Rick Vonk
 
 This script can calculate the correlation bewteen two columns from csv_files
 
+Input:
+    - csv-file with relation data
+
+output:
+    - command line response with spearman correlation
+
+Usage :
+    python /path/to/script/
 """
 #------------ Import -------------#
 import numpy as np

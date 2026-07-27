@@ -19,6 +19,8 @@ Output:
     - Heatmap with total data for all cases
     - weighted Heatmap with data of all cases
 
+Usage :
+    python /path/to/script/
 """
 #------------ Import -------------#
 import matplotlib.pyplot as plt

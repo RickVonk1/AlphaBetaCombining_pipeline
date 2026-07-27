@@ -12,6 +12,8 @@ Output:
     - Haddock-configs for all models
     - A haddock run job
 
+Usage :
+    python /path/to/script/
 """
 #------------ Import -------------#
 from pathlib import Path

@@ -16,6 +16,8 @@ Output:
     - a tsv file for angle data
     - a txt-file with analytics
 
+Usage :
+    python /path/to/script/
 """
 #------------ Import -------------#
 import os

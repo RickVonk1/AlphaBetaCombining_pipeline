@@ -7,7 +7,7 @@ This script is the last step in the haddock3 pipeline, it extracts relavant info
 Input:
     - The Experiment directory
     - An experiment name
-    - the metrics you wan to use
+    - the metrics you want to use
     - if you want the files ot be zipped
 
 Output:
@@ -16,6 +16,8 @@ Output:
     - csv-file with plot data
     - txt-file with analysis
 
+Usage :
+    python /path/to/script/
 """
 #------------ Import -------------#
 import csv

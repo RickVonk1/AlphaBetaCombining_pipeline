@@ -14,7 +14,7 @@ Output:
     - The direcotry tarred, removed.
 
 - Usage:
-    - tar_and_remove.py /path/to/dir
+    - python tar_and_remove.py /path/to/dir
 
 '''
 # ----------------- Imports ------------------ #

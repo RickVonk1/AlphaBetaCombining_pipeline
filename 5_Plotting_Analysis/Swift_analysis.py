@@ -2,7 +2,17 @@
 """
 Author : Rick Vonk
 
+This script combines the SwiftTCr result of each run.
+This script should only be used if the use of SwiftTCR was included in the experiment.
 
+Input:
+    - Total experiment folder
+
+output:
+    - csv-file containing SwiftTC results of all experiments
+
+Usage :
+    python /path/to/script/
 """
 #------------ Import -------------#
 import glob

@@ -12,6 +12,9 @@ Output :
     - Pipeline folders
     - csv file in 'Intermediate_files'with docking results
 
+Usage :
+    python /path/to/script/
+
 """
 #------------ Import -------------#
 import csv

@@ -14,6 +14,8 @@ Output:
     - Experiment folder
     - a csv file in the experiment folder with AF3 required data
 
+Usage :
+    python /path/to/script/
 """
 #------------ Import -------------#
 import csv
