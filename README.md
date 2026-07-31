@@ -18,7 +18,7 @@ Every Python script within this pipeline follows a standard internal structure o
 
 To use this pipeline modification to scripts is required. 
 *   **Script Modification:** For each script made within this pipeline, the Input part need to be modified with the desired input before activation.
-*   **Script activation:** For eveyr script in the pipeline counts : `python path/to/script`
+*   **Script activation:** For every script in the pipeline counts : `python path/to/script`
 
 ---
 ## Pipeline Stages
