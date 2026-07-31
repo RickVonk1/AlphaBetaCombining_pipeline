@@ -5,7 +5,7 @@ Author : Rick Vonk
 This script is to check if there is a corrolation between true docking and proper orientation when using AF3
 
 Input:
-    - Total experiment folder
+    - The Experiment directory, the overaching direction that is worked in.
 
 output:
     - csv-file with orientation data of all models

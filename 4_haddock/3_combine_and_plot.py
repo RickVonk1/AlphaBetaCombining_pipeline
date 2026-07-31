@@ -5,15 +5,15 @@ Author : Rick Vonk
 This script is the last step in the haddock3 pipeline, it extracts relavant information, centralises it for the whole experiment, makes a plot and then then tars the Haddock_ouput file to reduce inode usage
 
 Input:
-    - The Experiment directory
+    - The Experiment directory, the overaching direction that is worked in.
     - An experiment name
     - the metrics you want to use
     - if you want the files ot be zipped
 
 Output:
     - if zipping than a tarred haddock_output file
-    - a plot with output ranked on total
-    - csv-file with plot data
+    - An intermediary plot with output ranked on total
+    - csv-file with plot data for later use
     - txt-file with analysis
 
 Usage :

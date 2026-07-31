@@ -6,12 +6,12 @@ This script makes a new experiment in the experiment folder and prepares require
 A target chain is chosen and combined with all beta chains
 
 Input:
-    - The Experiment directory
+    - The Experiment directory, the overaching direction that is worked in.
     - An experiment name
-    - a alpha target chain from the csv file
+    - a alpha chain target chain from the csv file
 
 Output:
-    - Experiment folder
+    - Experiment folder structure
     - a csv file in the experiment folder with AF3 required data
 
 Usage :

@@ -5,12 +5,12 @@ Author : Rick Vonk
 This is the second script in the haddock3 pipeline and is able to make cfg files for each pdb entry and activate them in batches of 50.
 
 Input:
-    - The Experiment directory
+    - The Experiment directory, the overaching direction that is worked in.
     - An experiment name
 
 Output:
     - Haddock-configs for all models
-    - A haddock run job
+    - A haddock run job, which is activated.
 
 Usage :
     python /path/to/script/

@@ -5,7 +5,7 @@ Author : Rick Vonk
 Extract chain information for SwiftTCR from existing structure data
 
 Input:
-    - The Experiment directory
+    - The Experiment directory, the overaching direction that is worked in.
     - An experiment name
 
 Output:

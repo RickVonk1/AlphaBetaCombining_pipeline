@@ -6,8 +6,8 @@ This script is used to make a 3D histogram plot to assist in analysis of combina
 aswel as a txt file with analytics on the 3d plot data
 
 Input:
-    - Total experiment folder
-    - metrics wanted for plotting
+    - The Experiment directory, the overaching direction that is worked in.
+    - metrics wanted for plotting, selected from the given options
     - view angle for 3d plot
 
 Output:

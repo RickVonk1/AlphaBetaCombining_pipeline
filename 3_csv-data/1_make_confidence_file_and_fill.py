@@ -5,11 +5,11 @@ This script is intended for after AF complex generation to extract information r
 This script will make a csv file containing structural and sequence info
 
 Input :
-    - The Experiment directory
+    - The Experiment directory, the overaching direction that is worked in.
     - Experiment name
 
 Output :
-    - Pipeline folders
+    - Pipeline folders in the desired structure
     - csv file in 'Intermediate_files'with docking results
 
 Usage :

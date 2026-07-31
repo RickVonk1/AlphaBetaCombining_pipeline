@@ -5,7 +5,7 @@ Author : Rick Vonk
 This is the first script in the haddock3 pipeline, this script is able to make an experiment directory with required subdirectories and able to put relavant pdb entries in the input folder
 
 Input :
-    - The Experiment directory
+    - The Experiment directory, the overaching direction that is worked in.
     - An experiment name
 
 Output:

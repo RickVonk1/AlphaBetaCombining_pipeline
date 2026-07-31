@@ -6,7 +6,7 @@ This script combines the SwiftTCr result of each run.
 This script should only be used if the use of SwiftTCR was included in the experiment.
 
 Input:
-    - Total experiment folder
+    - The Experiment directory, the overaching direction that is worked in.
 
 output:
     - csv-file containing SwiftTC results of all experiments
