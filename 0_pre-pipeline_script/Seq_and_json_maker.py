@@ -23,6 +23,8 @@ import glob
 from pathlib import Path
 #----------------- inputs ------------------#
 
+CSV_file_name = 'Alpha_Beta_single_chains.csv'
+
 # ----------------- code ------------------ #
 
 def stitchr_json(output_dir, csv_file):
@@ -153,7 +155,7 @@ def csv_updater(csv_file, data_csv):
 
 script_location = Path(__file__).resolve()
 json_dir = os.path.join(script_location.parent, 'json/')
-ab_csv = os.path.join(script_location.parent.parent, '1_pre-AF3','required_files', 'Alpha_Beta_single_chains.csv')
+ab_csv = os.path.join(script_location.parent.parent, '1_pre-AF3','required_files', CSV_file_name)
 
 if __name__ == '__main__':
     errors = stitchr_json(json_dir, ab_csv)

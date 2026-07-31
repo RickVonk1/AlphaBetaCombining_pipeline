@@ -78,7 +78,8 @@ def AF3_chains_maker(output_dir, chains_file, target):
 working_dir = os.path.join(Exp_dir, experiment)
 
 script_location = Path(__file__).resolve()
-single_chains = os.path.join(script_location.parent, 'required_files', 'Alpha_Beta_single_chains.csv')
+required_files_dir = script_location.parent / 'required_files'
+single_chains = list(required_files_dir.glob('*.csv'))[0]
 
 
 if __name__ == "__main__":
