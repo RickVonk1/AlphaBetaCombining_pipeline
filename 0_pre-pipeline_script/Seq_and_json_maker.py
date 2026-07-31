@@ -25,6 +25,8 @@ from pathlib import Path
 
 CSV_file_name = 'Alpha_Beta_single_chains.csv'
 
+# If required modify the 'Manual_addition' function, else deactivate in the Activation section 
+
 # ----------------- code ------------------ #
 
 def stitchr_json(output_dir, csv_file):
