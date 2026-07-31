@@ -90,19 +90,18 @@ def json_extraction(output_dir):
 
 def Manual_addition(case_info):
     # The following cases failed with the following info:
-    # a8 ('TRAV38-2', 'TRAJ31', 'CAYRSALDNARLMF')
-    # b12 ('TRBV29-1', 'TRBJ2-7*01', 'CSVEVGMGLTYEQY')
-    # Info below was obtained by putting the gene in google's Gemini LLM
+    # a8 
+    # b12 
     case_info['a8'] = {}
-    case_info['a8']['l'] = 'MKKLLAMILWLQLDRLSGE'
-    case_info['a8']['v'] = 'LKVEQNPRFLITVKEGKNATLICEVTVPSTTATLQWFRQNRGKGLEFLIYYNNGEKEDGRFTAQVDKSSKYISLFIRDSQPSDSATYLCAM'
-    case_info['a8']['j'] = 'NNNARLMFGDGTQLVVKP'
+    case_info['a8']['l'] = '[Confidential]'
+    case_info['a8']['v'] = '[Confidential]'
+    case_info['a8']['j'] = '[Confidential]'
     case_info['a8']['c'] = ''
 
     case_info['b12'] = {}
-    case_info['b12']['l'] = 'MGPQLLGYVVLCLLGAGPLEA'
-    case_info['b12']['v'] = 'QVTQNPRYLITVTGKKLTVTCSQNMNHEYMSWYRQDPGLGLRQIYYSMNVEVTDKGDVPEGYKVSRKEKRNFPLILESPSPNQTSLYFCASS'
-    case_info['b12']['j'] = 'SYEQYFGPGTRLTVT'
+    case_info['b12']['l'] = '[Confidential]'
+    case_info['b12']['v'] = '[Confidential]'
+    case_info['b12']['j'] = '[Confidential]'
     case_info['b12']['c'] = ''
 
     return case_info
@@ -111,9 +110,9 @@ def csv_maker(output_dir, case_info):
     csv_file_loc = os.path.join(os.path.dirname(os.path.abspath(output_dir)), 'murine_combined_seq_CSV_file.csv')
     with open (csv_file_loc, 'w', newline='') as f:
         csv_file = csv.writer(f)
-        murine_c_seq_a = 'DIQNPEPAVYQLKDPRSQDSTLCLFTDFDSQINVPKTMESGTFITDKCVLDMKAMDSKSNGAIAWSNQTSFTCQDIFKETNATYPSSDVPCDATLTEKSFETDMNLNFQNLSVMGLRILLLKVAGFNLLMTLRLWSS'
+        murine_c_seq_a = '[Confidential]'
         murine_l_seq_a = ''
-        murine_c_seq_b = 'EDLRNVTPPKVSLFEPSKAEIANKQKATLVCLARGFFPDHVELSWWVNGKEVHSGVCTDPQAYKESNYSYCLSSRLRVSATFWHNPRNHFRCQVQFHGLSEEDKWPEGSPKPVTQNISAEAWGRADCGITSASYHQGVLSATILYEILLGKATLYAVLVSGLVLMAMVKKKNSGSG'
+        murine_c_seq_b = '[Confidential]'
         murine_l_seq_b = ''
         csv_file.writerow(['ID','sequence'])
         for ID, seq in case_info.items():
