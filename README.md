@@ -25,14 +25,14 @@ To use this pipeline modification to scripts is required.
 
 ### 0. Sequence Generation (`0_pre-pipeline_script`)
 The pipeline begins by generating full-length sequences from gene locations.
-*   Uses **Stitchr** (Heather, 2026) to generate the full sequence using a provided CDR3 sequence.
+*   Uses **Stitchr** (Heather, 2026) to generate the full TCR-sequence using a provided CDR3 sequence.
 *   Modifies the raw Stitchr output by removing the leader sequence and replacing the native constant domain with a provided murine constant domain.
 *   **Output:** A CSV file containing the finalized full sequences, alongside an updated version of `Alpha_Beta_single_chains.csv` deposited into the `1_pre-AF3` directory.
 
 ### 1. AlphaFold Preparation (`1_Pre-AF3`)
 Prepares the directory structures and input files required for AlphaFold structural prediction.
 *   Generates a targeted CSV file within newly created directories for AlphaFold's use.
-*   Integrates the full sequence of the TCR:pMHC complex mapped to appropriate chain IDs. The pMHC sequence is obtained via **PANDORA** (Rademaker et al., 2025). Directory formatting is modeled after the AlphaFold TCR pipeline developed by Dario Marzella for RadboudUMC (Marzella, 2026).
+*   Integrates the full sequence of the TCR:pMHC complex mapped to appropriate chain IDs. The pMHC sequence is obtained via **PANDORA** (Marzella et al., 2025). Directory formatting is modeled after the AlphaFold TCR pipeline developed by Dario Marzella for RadboudUMC (Marzella, 2026).
 
 ### 2. AlphaFold Structure Generation (`2_AF3`)
 Executes a streamlined version of the AlphaFold3 TCRpMHC pipeline.
@@ -63,4 +63,4 @@ Contains shared utility scripts utilized across multiple pipeline sections, alon
 
 *   **D. Marzella.** AF3_TCRpMHC_snellius, (2026), GitHub repository, [X-lab-3D/AF3_TCRpMHC_snellius](https://github.com/X-lab-3D/AF3_TCRpMHC_snellius).
 *   **J. Heather.** stitchr, (2026), GitHub repository, [JamieHeather/stitchr](https://github.com/JamieHeather/stitchr).
-*   **Rademaker, D. T., Parizi, F. M., Van Vreeswijk, M., Eerden, S., Marzella, D. F., & Xue, L. C.** (2025). Predicting reverse-bound peptide conformations in MHC Class II with PANDORA. Frontiers in Immunology, 16, 1525576. https://doi.org/10.3389/fimmu.2025.1525576
+*   **Marzella, D.F., Parizi, F.M., Tilborg, D.V., Renaud, N., Sybrandi, D., Buzatu, R., Rademaker, D.T., ‘T Hoen, P.A.C., Xue, L.C.,** (2022). PANDORA: A Fast, Anchor-Restrained Modelling Protocol for Peptide: MHC Complexes. Front. Immunol. 13, 878762. https://doi.org/10.3389/fimmu.2022.878762
